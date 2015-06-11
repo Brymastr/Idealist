@@ -7,12 +7,15 @@
 var Project = require('./models/Project');
 
 module.exports = function(app) {
-  app.route('/projects')
-    .get()
+  app.route('/api/projects')
+    .get(function(req, res) {
+      res.send('WORKING!!!');
+    })
     .post();
 
 
-  //app.get('*', function(req, res) {
-  //  res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
-  //});
+  // Anything else should go to angular routes
+  app.get('*', function(req, res) {
+    res.send('Invalid api route. Route received > ' + req.protocol + '://' + req.get('host') + req.originalUrl);
+  });
 };

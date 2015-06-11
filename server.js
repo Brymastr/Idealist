@@ -4,6 +4,7 @@
 
 var mongoose = require('mongoose');
 var express = require('express');
+var http = require('http');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -31,3 +32,8 @@ mongoose.connection.on('open', function() {
 
 // Express routing
 require('./app/routes')(app);
+
+var port = 9000;
+http.createServer(app).listen(port, function() {
+  console.log("server listening on port " + port);
+});
