@@ -4,15 +4,25 @@
 
 // Express routes
 
+// Load models
 var Project = require('./models/Project');
 
-module.exports = function(app) {
-  app.route('/api/projects')
-    .get(function(req, res) {
-      res.send('WORKING!!!');
-    })
-    .post();
+// Load controllers
+var UsersController = require('./controllers/UsersController');
+var ProjectsController = require('./controllers/ProjectsController');
+var TeamsController = require('./controllers/TeamsController');
+var AuthController = require('./controllers/AuthController');
 
+module.exports = function(app) {
+
+
+  app.route('/api/projects')
+    .get(ProjectsController.getProjects)
+    .post(ProjectsController.postProjects);
+
+
+  app.route('/api/projects/:id')
+    .get(ProjectsController.getProject);
 
   // Anything else should go to angular routes
   app.get('*', function(req, res) {
