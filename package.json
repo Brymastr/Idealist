@@ -22,5 +22,10 @@
     "method-override": "^2.3.3",
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "should": "^6.0.3",
+    "supertest": "^1.0.1"
   }
 }

@@ -8,7 +8,8 @@ var http = require('http');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var db = require('./config/database');
+//var db = require('./config/production/database');
+var db = require('./config/debug/database');
 
 // Create app using express router
 var app = express();
