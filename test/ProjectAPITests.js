@@ -43,7 +43,25 @@ describe('Projects', function() {
         res.body.long_description.should.equal('Test project long description');
         objectId = res.body._id;
         done();
-      })
+      });
+  });
+
+  // GET
+  it('should return the object from the database', function(done) {
+    request(baseUrl)
+      .get('/api/projects/' + objectId)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if(err)
+          throw err;
+
+        res.body._id.should.equal(objectId);
+        res.body.name.should.equal('Test project name');
+        res.body.short_description.should.equal('Test project short description');
+        res.body.long_description.should.equal('Test project long description');
+        done();
+      });
   });
 
   // DELETE
@@ -54,7 +72,14 @@ describe('Projects', function() {
       .end(function(err, res) {
         if(err)
           throw err;
-        done();
+
+        request(baseUrl)
+          .get('/api/projects/' + objectId)
+          .expect(204)
+          .end(function(err, res) {
+            if(err) throw err;
+            done();
+          });
       });
   });
 
