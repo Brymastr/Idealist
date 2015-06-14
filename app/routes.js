@@ -18,11 +18,11 @@ module.exports = function(app) {
 
   app.route('/api/projects')
     .get(ProjectsController.getProjects)
-    .post(ProjectsController.postProjects);
-
+    .post(ProjectsController.postProject);
 
   app.route('/api/projects/:id')
-    .get(ProjectsController.getProject);
+    .get(ProjectsController.getProject)
+    .delete(ProjectsController.deleteProject);
 
   // Anything else should go to angular routes
   app.get('*', function(req, res) {

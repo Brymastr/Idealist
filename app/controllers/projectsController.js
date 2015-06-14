@@ -21,7 +21,7 @@ exports.getProject = function(req, res) {
   // Get a specific project from the database
 };
 
-exports.postProjects = function(req, res) {
+exports.postProject = function(req, res) {
   // Create a new project in the database
   new Project({
     name: req.body.name,
@@ -31,7 +31,17 @@ exports.postProjects = function(req, res) {
     date_updated: new Date()
   })
     .save(function(err, result) {
-      res.send("Project created");
+      res.json(result);
       console.log("Project created");
     });
+};
+
+exports.deleteProject = function(req, res) {
+
+  Project.remove({_id: req.params.id}, function (err) {
+    if (!err)
+      res.send("Project deleted");
+    else
+      res.send(err.message);
+  });
 };
