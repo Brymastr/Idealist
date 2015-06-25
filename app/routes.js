@@ -15,7 +15,7 @@ var AuthController = require('./controllers/AuthController');
 
 module.exports = function(app) {
 
-
+  // Project routes
   app.route('/api/projects')
     .get(ProjectsController.getProjects)
     .post(ProjectsController.postProject)
@@ -24,6 +24,27 @@ module.exports = function(app) {
   app.route('/api/projects/:id')
     .get(ProjectsController.getProject)
     .delete(ProjectsController.deleteProject);
+
+  // User routes
+  app.route('/api/users')
+    .get(UsersController.getUsers)
+    .post(UsersController.postUsers)
+    .put(UsersController.putUsers);
+
+  app.route('/api/users/:id')
+    .get(UsersController.getUser)
+    .delete(UsersController.deleteUser);
+
+  // Authentication routes
+  app.route('/api/auth/provider')
+    .get(passport.authenticate('provider'));
+
+  app.route('/api/auth/provider/callback')
+    .get(passport.authenticate('provider', {
+      successRedirect: '/',
+      failureRedirect: '/login'
+    }));
+
 
   // Anything else should go to angular routes
   app.get('*', function(req, res) {
