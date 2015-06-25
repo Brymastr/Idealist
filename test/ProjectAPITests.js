@@ -47,7 +47,21 @@ describe('Projects', function() {
       });
   });
 
-  // GET
+  // GET (all)
+  it('should return a list of all projects in the database', function(done) {
+    request(baseUrl)
+      .get('api/projects')
+      .expect(200)
+      .end(function(err, res) {
+        if(err)
+          throw err;
+
+        res.body.should.not.be.empty;
+        done();
+      });
+  })
+
+  // GET (one)
   it('should return the object from the database', function(done) {
     request(baseUrl)
       .get('api/projects/' + objectId)
