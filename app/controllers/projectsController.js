@@ -4,6 +4,7 @@
 
 var Project = require('../models/Project');
 
+// GET /api/
 exports.getProjects = function(req, res) {
   // Get all projects from the database
   Project.find({}, function(err, projects) {
@@ -15,14 +16,21 @@ exports.getProjects = function(req, res) {
   })
 };
 
+// GET /api/:id
 exports.getProject = function(req, res) {
-  res.send("getProject()");
-  console.log("getProject()");
-  // Get a specific project from the database
+  Project.findOne({_id: req.params.id}, function(err, project) {
+    console.log(project);
+    if(project == null)
+      res.sendStatus(204);
+    else if(!err)
+      res.json(project);
+    else
+      res.send(err.message);
+  });
 };
 
+// POST /api/
 exports.postProject = function(req, res) {
-  // Create a new project in the database
   new Project({
     name: req.body.name,
     short_description: req.body.short_description,
@@ -36,12 +44,23 @@ exports.postProject = function(req, res) {
     });
 };
 
+// PUT /api/
+exports.putProject = function(req, res) {
+  Project.findByIdAndUpdate(req.body._id, req.body, function(err, project) {
+    if(err)
+      res.send(err);
+    res.json(project);
+  });
+};
+
+// DELETE /api/:id
 exports.deleteProject = function(req, res) {
 
-  Project.remove({_id: req.params.id}, function (err) {
-    if (!err)
-      res.send("Project deleted");
-    else
+  Project.findOneAndRemove({_id: req.params.id}, function (err, project) {
+    if (!err && res != null) {
+      console.log(res);
+      res.status(200).json({status:"ok"})
+    } else
       res.send(err.message);
   });
 };

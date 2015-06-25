@@ -18,7 +18,8 @@ module.exports = function(app) {
 
   app.route('/api/projects')
     .get(ProjectsController.getProjects)
-    .post(ProjectsController.postProject);
+    .post(ProjectsController.postProject)
+    .put(ProjectsController.putProject);
 
   app.route('/api/projects/:id')
     .get(ProjectsController.getProject)

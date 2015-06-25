@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var db = require('../config/production/database');
 
 describe('Projects', function() {
-  var baseUrl = "http://localhost:9000";
+  var baseUrl = "http://localhost:9000/";
   var objectId = null;
 
 
@@ -30,13 +30,14 @@ describe('Projects', function() {
     };
 
     request(baseUrl)
-      .post('/api/projects')
+      .post('api/projects/')
       .send(project)
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if(err)
           throw err;
+        console.log(res);
         res.body.should.have.property('_id');
         res.body.name.should.equal('Test project name');
         res.body.short_description.should.equal('Test project short description');
@@ -49,7 +50,7 @@ describe('Projects', function() {
   // GET
   it('should return the object from the database', function(done) {
     request(baseUrl)
-      .get('/api/projects/' + objectId)
+      .get('api/projects/' + objectId)
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
@@ -64,17 +65,53 @@ describe('Projects', function() {
       });
   });
 
+  // PUT
+  it('should update the project name', function(done) {
+
+    var project = {
+      _id: objectId,
+      name: "Updated project name",
+      short_description: "Test project short description",
+      long_description: "Test project long description",
+      date_created: new Date(2015, 1, 1),
+      date_updated: new Date(2015, 2, 2)
+    };
+
+    request(baseUrl)
+      .put('api/projects/')
+      .send(project)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if(err)
+          throw err;
+
+        request(baseUrl)
+          .get('api/projects/' + objectId)
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+            if(err)
+              throw err;
+
+            res.body._id.should.equal(objectId);
+            res.body.name.should.equal('Updated project name');
+            done();
+          })
+      })
+  });
+
   // DELETE
   it('should delete the project in the database', function(done) {
     request(baseUrl)
-      .delete('/api/projects/' + objectId)
+      .delete('api/projects/' + objectId)
       .expect(200)
       .end(function(err, res) {
         if(err)
           throw err;
 
         request(baseUrl)
-          .get('/api/projects/' + objectId)
+          .get('api/projects/' + objectId)
           .expect(204)
           .end(function(err, res) {
             if(err) throw err;
