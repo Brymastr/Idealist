@@ -11,9 +11,9 @@ var Project = require('./models/Project');
 var UsersController = require('./controllers/UsersController');
 var ProjectsController = require('./controllers/ProjectsController');
 var TeamsController = require('./controllers/TeamsController');
-var AuthController = require('./controllers/AuthController');
+var AuthController = require('./../config/debug/passport');
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
 
   // Project routes
   app.route('/api/projects')
@@ -25,15 +25,24 @@ module.exports = function(app) {
     .get(ProjectsController.getProject)
     .delete(ProjectsController.deleteProject);
 
-  // User routes
-  app.route('/api/users')
-    .get(UsersController.getUsers)
-    .post(UsersController.postUsers)
-    .put(UsersController.putUsers);
+  // Auth routes
+  app.route('/api/signup')
+    .post(passport.authenticate('local-signup', {
+      successRedirect: '/profile',
+      failureRedirect: '/register',
+      failureFlash: true
+    }));
 
-  app.route('/api/users/:id')
-    .get(UsersController.getUser)
-    .delete(UsersController.deleteUser);
+  app.route('/api/login')
+    .post(passport.authenticate('local-login', {
+      successRedirect: '/profile',
+      failureRedirect: 'login',
+      failureFlash: true
+    }));
+
+  //app.route('/api/users/:id')
+  //  .get(UsersController.getUser)
+  //  .delete(UsersController.deleteUser);
 
   // Authentication routes
   app.route('/api/auth/provider')

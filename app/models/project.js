@@ -7,7 +7,7 @@
 var mongoose = require('mongoose');
 var User = require('./User');
 
-module.exports = mongoose.model('Project', {
+var projectSchema = mongoose.Schema({
   name: String,
   short_description: String,
   long_description: String,
@@ -15,7 +15,9 @@ module.exports = mongoose.model('Project', {
     uri: String,
     title: String
   }],
-  author: User,
+  //author: User,
   date_created: Date,
   date_updated: Date
 });
+
+module.exports = mongoose.model('Project', projectSchema);
