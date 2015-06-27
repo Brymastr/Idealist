@@ -3,5 +3,6 @@
  */
 
 module.exports = {
-  url: 'mongodb://brycen:dorsay@ds063287.mongolab.com:63287/idealist-dev'
+  url: 'mongodb://localhost/idealist'
+  //url: 'mongodb://brycen:dorsay@ds063287.mongolab.com:63287/idealist-dev'
 };
