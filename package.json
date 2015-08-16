@@ -15,6 +15,9 @@
   "bugs": {
     "url": "https://github.com/Brymastr/Idealist/issues"
   },
+  "scripts": {
+    "ci-test": "istanbul cover mocha -- -R tap \"test/*.js\" > test.tap && istanbul report clover"
+  },
   "homepage": "https://github.com/Brymastr/Idealist",
   "dependencies": {
     "bcrypt": "^0.8.3",
@@ -30,6 +33,7 @@
     "passport-oauth": "^1.0.0"
   },
   "devDependencies": {
+    "istanbul": "^0.3.17",
     "mocha": "^2.2.5",
     "should": "^6.0.3",
     "supertest": "^1.0.1"
