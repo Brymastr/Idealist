@@ -10,8 +10,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var methodOverride = require('method-override');
 var session = require('express-session');
-var db = require('./config/debug/database');
-
+var config = require('./config');
 
 
 // Create app using express router
@@ -42,7 +41,7 @@ require('./config/debug/passport')(passport);
 // Express routing
 require('./app/routes')(app, passport);
 
-var port = 9000;
+var port = config.port;
 http.createServer(app).listen(port, function() {
   console.log("server listening on port " + port);
 });
