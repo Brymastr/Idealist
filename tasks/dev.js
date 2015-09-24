@@ -10,13 +10,15 @@ var runCommand = function(command) {
       console.log('exec error: ' + err);
     }
   });
-}
+};
+
 //gulp.task('mongo-stop', function() {
 //  runCommand('mongo admin --eval "db.shutdownServer();"');
 //});
 //gulp.task('mongo-start', function() {
 //  runCommand("mongod");
 //});
+
 gulp.task('run-server', function() {
   nodemon({
     script: 'server.js'
@@ -25,4 +27,4 @@ gulp.task('run-server', function() {
   })
 });
 
-gulp.task('default', ['run-server']);
+gulp.task('dev', ['run-server']);
