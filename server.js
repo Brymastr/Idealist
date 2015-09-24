@@ -34,7 +34,7 @@ app.use(passport.session());
 mongoose.connect(db.url);
 
 mongoose.connection.on('open', function() {
-  console.log('Mongo connection is open');
+  console.log('Mongo connection is open. Connected to: ' + db.url);
 });
 
 require('./config/debug/passport')(passport);
