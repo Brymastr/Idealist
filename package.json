@@ -30,8 +30,10 @@
     "passport-oauth": "^1.0.0"
   },
   "devDependencies": {
+    "gulp": "^3.9.0",
     "istanbul": "^0.3.17",
     "mocha": "^2.2.5",
+    "require-dir": "^0.3.0",
     "should": "^6.0.3",
     "supertest": "^1.0.1"
   }

@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(methodOverride());
 app.use(session({
-  secret: 'not much of a secret yet'
+  secret: config.secret
 }));
 app.use(passport.initialize());
 app.use(passport.session());
