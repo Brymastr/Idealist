@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var methodOverride = require('method-override');
 var session = require('express-session');
-var config = require('./config');
+var config = require('./config/config');
 
 
 // Create app using express router
@@ -30,10 +30,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB connection
-mongoose.connect(db.url);
+mongoose.connect(config.db);
 
 mongoose.connection.on('open', function() {
-  console.log('Mongo connection is open. Connected to: ' + db.url);
+  console.log('Mongo connection is open. Connected to: ' + config.db);
 });
 
 require('./config/debug/passport')(passport);
