@@ -17,7 +17,7 @@ var config = require('./config/config');
 var app = express();
 
 // App configuration
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/frontend'));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
