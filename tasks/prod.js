@@ -5,7 +5,7 @@ var del = require('del');
 gulp.task('build', ['clean'], function() {
   return gulp.src('./app/**/*.js')
     .pipe(plugins.uglify())
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest('dist/app/'));
 });
 
 gulp.task('config', ['clean'], function() {
@@ -23,7 +23,7 @@ gulp.task('auth', ['clean'], function() {
 
 gulp.task('server', ['clean'], function() {
   return gulp.src('server.js')
-    .pipe(plugins.uglify({mangle: false}))
+    //.pipe(plugins.uglify({mangle: false}))
     .pipe(gulp.dest('dist/'));
 });
 

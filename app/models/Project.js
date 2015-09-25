@@ -1,11 +1,11 @@
 /**
  * Created by Brycen on 2015-06-10.
  */
-var config = require('../config/config');
+var config = require('../../config/config');
 // Project model
 
 var mongoose = require('mongoose');
-var User = require('.' + config.modelsDir + '/User');
+var User = require('./User');
 
 var projectSchema = mongoose.Schema({
   name: String,

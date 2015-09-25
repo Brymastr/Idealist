@@ -1,12 +1,12 @@
 // config
-var config = require('./config/config');
+var config = require('../config/config');
 
 
 // Load models
-var Project = require(config.modelsDir + '/Project');
+var Project = require('./models/Project');
 
 // Load controllers
-var ProjectsController = require(config.controllersDir + '/ProjectsController');
+var ProjectsController = require('./controllers/ProjectsController');
 
 module.exports = function(app, passport) {
 

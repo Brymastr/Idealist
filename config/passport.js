@@ -7,7 +7,7 @@ var config = require('../config/config');
 var LocalStrategy = require('passport-local').Strategy;
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
-var User = require('.' + config.modelsDir + '/User');
+var User = require('../app/models/User');
 
 module.exports = function(passport) {
 

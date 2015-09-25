@@ -1,9 +1,9 @@
 /**
  * Created by Brycen on 2015-06-10.
  */
-var config = require('../config/config');
+var config = require('../../config/config');
 
-var Project = require('.' + config.modelsDir + '/Project');
+var Project = require('../models/Project');
 
 // GET /api/
 exports.getProjects = function(req, res) {

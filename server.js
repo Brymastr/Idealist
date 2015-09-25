@@ -38,7 +38,7 @@ mongoose.connection.on('open', function() {
 require('./config/passport')(passport);
 
 // Express routing
-require(config.routes)(app, passport);
+require('./app/routes')(app, passport);
 
 var port = config.port;
 http.createServer(app).listen(port, function() {
