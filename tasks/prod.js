@@ -10,8 +10,16 @@ gulp.task('build', ['clean'], function() {
 });
 
 gulp.task('config', ['clean'], function() {
-  return gulp.src('./config/config.prod.js')
+  return gulp.src(['./config/config.prod.js'])
     .pipe(plugins.uglify({mangle: false}))
+    .pipe(plugins.rename('config.js'))
+    .pipe(gulp.dest('dist/config/'));
+});
+
+gulp.task('passport', ['clean'], function() {
+  return gulp.src(['./config/passport.prod.js'])
+    .pipe(plugins.uglify({mangle: false}))
+    .pipe(plugins.rename('passport.js'))
     .pipe(gulp.dest('dist/config/'));
 });
 
@@ -24,7 +32,7 @@ gulp.task('server', ['clean'], function() {
 gulp.task('dependencies', ['clean'], function() {
   return gulp.src([
     './node_modules/**',
-    '!./node_modules/gulp-*'
+    '!./node_modules/{gulp*,gulp*/**}'
   ])
     .pipe(gulp.dest('dist/libs/'));
 });
@@ -33,4 +41,11 @@ gulp.task('clean', function() {
   return del(['dist']);
 });
 
-gulp.task('build-prod', ['clean', 'build', 'server', 'config', 'dependencies']);
+gulp.task('build-prod', [
+  'clean',
+  'build',
+  'server',
+  'config',
+  'passport',
+  'dependencies'
+]);
