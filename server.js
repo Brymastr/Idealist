@@ -17,7 +17,7 @@ var config = require('./config/config');
 var app = express();
 
 // App configuration
-app.use(morgan('dev'));
+app.use(morgan(config.env));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
@@ -35,10 +35,10 @@ mongoose.connection.on('open', function() {
   console.log('Mongo connection is open. Connected to: ' + config.db);
 });
 
-require('./config/debug/passport')(passport);
+require('./config/passport')(passport);
 
 // Express routing
-require('./app/routes')(app, passport);
+require(config.routes)(app, passport);
 
 var port = config.port;
 http.createServer(app).listen(port, function() {

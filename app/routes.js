@@ -1,17 +1,12 @@
-/**
- * Created by Brycen on 2015-06-10.
- */
+// config
+var config = require('./config/config');
 
-// Express routes
 
 // Load models
-var Project = require('./models/Project');
+var Project = require(config.modelsDir + '/Project');
 
 // Load controllers
-var UsersController = require('./controllers/UsersController');
-var ProjectsController = require('./controllers/ProjectsController');
-var TeamsController = require('./controllers/TeamsController');
-var AuthController = require('./../config/debug/passport');
+var ProjectsController = require(config.controllersDir + '/ProjectsController');
 
 module.exports = function(app, passport) {
 

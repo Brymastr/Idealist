@@ -6,7 +6,7 @@ var assert = require('assert');
 var should = require('should');
 var request = require('supertest');
 var mongoose = require('mongoose');
-var db = require('../config/production/database');
+var config = require('../config/config');
 
 describe('Projects', function() {
   var baseUrl = "http://localhost:9000/";
@@ -15,7 +15,7 @@ describe('Projects', function() {
 
   // Before starting any tests
   before(function(done) {
-    mongoose.connect(db.url);
+    mongoose.connect(config.db);
     done();
   });
 

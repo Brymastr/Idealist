@@ -4,7 +4,6 @@ var del = require('del');
 
 gulp.task('build', ['clean'], function() {
   return gulp.src('./app/**/*.js')
-    .pipe(plugins.concat('app.min.js'))
     .pipe(plugins.uglify())
     .pipe(gulp.dest('dist/'));
 });
@@ -16,10 +15,9 @@ gulp.task('config', ['clean'], function() {
     .pipe(gulp.dest('dist/config/'));
 });
 
-gulp.task('passport', ['clean'], function() {
-  return gulp.src(['./config/passport.prod.js'])
+gulp.task('auth', ['clean'], function() {
+  return gulp.src(['./config/passport.js', './config/auth.js'])
     .pipe(plugins.uglify({mangle: false}))
-    .pipe(plugins.rename('passport.js'))
     .pipe(gulp.dest('dist/config/'));
 });
 
@@ -34,7 +32,7 @@ gulp.task('dependencies', ['clean'], function() {
     './node_modules/**',
     '!./node_modules/{gulp*,gulp*/**}'
   ])
-    .pipe(gulp.dest('dist/libs/'));
+    .pipe(gulp.dest('dist/node_modules/'));
 });
 
 gulp.task('clean', function() {
@@ -46,6 +44,6 @@ gulp.task('build-prod', [
   'build',
   'server',
   'config',
-  'passport',
+  'auth',
   'dependencies'
 ]);

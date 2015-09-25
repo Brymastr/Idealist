@@ -2,12 +2,12 @@
  * Created by Brycen on 2015-06-10.
  */
 
+var config = require('../config/config');
+
 var LocalStrategy = require('passport-local').Strategy;
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
-var User = require('../../app/models/User');
-
-var authConfig = require('./auth');
+var User = require('.' + config.modelsDir + '/User');
 
 module.exports = function(passport) {
 
