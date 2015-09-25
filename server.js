@@ -40,7 +40,6 @@ require('./config/passport')(passport);
 // Express routing
 require('./app/routes')(app, passport);
 
-var port = config.port;
-http.createServer(app).listen(port, function() {
-  console.log("server listening on port " + port);
+http.createServer(app).listen(config.port, function() {
+  console.log("server listening on port " + config.port);
 });

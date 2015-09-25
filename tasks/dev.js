@@ -14,14 +14,11 @@ var runCommand = function(command) {
   });
 };
 
-//gulp.task('mongo-stop', function() {
-//  runCommand('mongo admin --eval "db.shutdownServer();"');
-//}
-//gulp.task('mongo-start', function() {
-//  runCommand("mongod");
-//});
+gulp.task('mongo-start', function() {
+  runCommand("mongod");
+});
 
-gulp.task('run-server', function() {
+gulp.task('run-server', ['mongo-start'], function() {
   nodemon({
     script: 'server.js',
     ext: 'js html',
@@ -29,24 +26,9 @@ gulp.task('run-server', function() {
   })
 });
 
-gulp.task('lint', function() {
-  return gulp.src(['/app/**/*.js'])
-    .pipe(jslint({
-      reporter: function(event) {
-        var msg = ' ' + event.file;
-        if(event.pass) {
-          msg = '[PASS]' + msg;
-        } else {
-          msg = '[FAIL]' + msg;
-        }
-        console.log(msg);
-      }
-    }))
-});
-
-gulp.task('test', function() {
-  console.log('test task run');
-});
 
 
-gulp.task('dev', ['run-server']);
+gulp.task('dev', [
+  'mongo-start',
+  'run-server'
+]);

@@ -23,7 +23,7 @@ gulp.task('auth', ['clean'], function() {
 
 gulp.task('server', ['clean'], function() {
   return gulp.src('server.js')
-    //.pipe(plugins.uglify({mangle: false}))
+    .pipe(plugins.uglify({mangle: false}))
     .pipe(gulp.dest('dist/'));
 });
 
