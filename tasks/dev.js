@@ -1,8 +1,6 @@
 var gulp = require('gulp');
 var exec = require('child_process').exec;
-var nodemon = require('gulp-nodemon');
-var watch = require('gulp-watch');
-var jslint = require('gulp-jslint');
+var plugins = require('gulp-load-plugins')();
 
 var runCommand = function(command) {
   exec(command, function (err, stdout, stderr) {
@@ -19,7 +17,7 @@ gulp.task('mongo-start', function() {
 });
 
 gulp.task('run-server', ['mongo-start'], function() {
-  nodemon({
+  plugins.nodemon({
     script: 'server.js',
     ext: 'js html',
     env: {'NODE_ENV' : 'development'}

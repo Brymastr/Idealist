@@ -1,0 +1,42 @@
+USER MODEL:
+_id: auto incrementing
+username: String
+firstname: String
+lastname: String
+email: String
+password: String
+projects: [project_id:ObjectID]
+password change token: String
+date updated: Date
+date created: Date
+profile picture: BSON
+
+PROJECT MODEL:
+_id: ObjectID
+title: String
+summary: String, 125 char limit
+description: String, longer summary
+images: [BSON]
+urls: [String]
+tags: [String]
+owner_feasibility: integer
+owner_upvote: integer
+owner_downvote: integer
+public_feasibility: integer
+public upvote: integer  (like stackoverflow)
+public_downvote: integer
+points estimate: integer limit by week or month or year based on project duration
+source: String, where the idea came from
+comments: [comment_id:ObjectID]
+visibility_level: integer, only me, everyone, custom(specific usernames(user ObjectID) or email addresses)
+people who can view: specific usernames(user ObjectID) or email addresses
+date created: Date
+date updated: Date
+
+COMMENT MODEL:
+_id: ObjectID
+body: String
+creator: ObjectID, user
+created date: Date
+updated date: Date
+feasibility_rating: integer, max 10
