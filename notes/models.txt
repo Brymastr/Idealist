@@ -7,7 +7,7 @@ email: String
 password: String
 projects: [project_id:ObjectID]
 password change token: String
-date updated: Date
+dateupdated: Date
 date created: Date
 profile picture: BSON
 

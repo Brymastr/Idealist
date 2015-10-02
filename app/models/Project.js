@@ -8,14 +8,22 @@ var mongoose = require('mongoose');
 var User = require('./User');
 
 var projectSchema = mongoose.Schema({
-  name: String,
-  short_description: String,
-  long_description: String,
-  images: [{
-    uri: String,
-    title: String
-  }],
-  //author: User,
+  title: String,
+  summary: String,
+  description: String,
+  images: String,
+  urls: [String],
+  tags: [String],
+  ownerFeasibility: Number,
+  ownerUpvote: Number,
+  ownerDownvote: Number,
+  publicFeasibility: Number,
+  publicUpvote: Number,
+  publicDownvote: Number,
+  pointsEstimate: Number,
+  source: String,
+  comments: [{commentId: Number}],
+  visibilityLevel: Number,
   date_created: Date,
   date_updated: Date
 });
