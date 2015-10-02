@@ -28,11 +28,8 @@ gulp.task('server', ['clean'], function() {
 });
 
 gulp.task('dependencies', ['clean'], function() {
-  return gulp.src([
-    './node_modules/**',
-    '!./node_modules/{gulp*,gulp*/**}'
-  ])
-    .pipe(gulp.dest('dist/node_modules/'));
+  return gulp.src('package.json')
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('clean', function() {
