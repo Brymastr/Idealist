@@ -33,9 +33,17 @@ exports.getProject = function(req, res) {
 // POST /api/
 exports.postProject = function(req, res) {
   new Project({
-    name: req.body.name,
-    short_description: req.body.short_description,
-    long_description: req.body.long_description,
+    title: req.body.title,
+    summary: req.body.summary,
+    description: req.body.description,
+    tags: req.body.tags,
+    source: req.body.source,
+    visibility: req.body.visibility,
+
+    ownerUpvotes: 0,
+    ownerDownvotes: 0,
+    publicUpvotes: 0,
+    publicDownvotes: 0,
     date_created: new Date(),
     date_updated: new Date()
   })

@@ -22,9 +22,12 @@ describe('Projects', function() {
   // POST
   it('should create a new project in the database and return it', function(done) {
     var project = {
-      name: "Test project name",
-      short_description: "Test project short description",
-      long_description: "Test project long description",
+      title: "Test project title",
+      summary: "Summary of the project",
+      description: "Test project long description",
+      tags: ["tag1", "tag2"],
+      source: "This idea came while I was sitting in class",
+      visibility: 0,
       date_created: new Date(2015, 1, 1),
       date_updated: new Date(2015, 2, 2)
     };
@@ -37,11 +40,11 @@ describe('Projects', function() {
       .end(function(err, res) {
         if(err)
           throw err;
-        console.log(res);
         res.body.should.have.property('_id');
-        res.body.name.should.equal('Test project name');
-        res.body.short_description.should.equal('Test project short description');
-        res.body.long_description.should.equal('Test project long description');
+        res.body.title.should.equal('Test project title');
+        res.body.summary.should.equal('Summary of the project');
+        res.body.description.should.equal('Test project long description');
+        res.body.source.should.equal('This idea came while I was sitting in class');
         objectId = res.body._id;
         done();
       });
@@ -59,7 +62,7 @@ describe('Projects', function() {
         res.body.should.not.be.empty;
         done();
       });
-  })
+  });
 
   // GET (one)
   it('should return the object from the database', function(done) {
@@ -71,22 +74,25 @@ describe('Projects', function() {
         if(err)
           throw err;
 
-        res.body._id.should.equal(objectId);
-        res.body.name.should.equal('Test project name');
-        res.body.short_description.should.equal('Test project short description');
-        res.body.long_description.should.equal('Test project long description');
+        res.body.should.have.property('_id');
+        res.body.title.should.equal('Test project title');
+        res.body.summary.should.equal('Summary of the project');
+        res.body.description.should.equal('Test project long description');
+        res.body.source.should.equal('This idea came while I was sitting in class');
+        objectId = res.body._id;
         done();
       });
   });
 
   // PUT
-  it('should update the project name', function(done) {
+  it('should update the project title', function(done) {
 
     var project = {
       _id: objectId,
-      name: "Updated project name",
-      short_description: "Test project short description",
-      long_description: "Test project long description",
+      title: "Updated project title",
+      summary: "Updated summary of the project",
+      description: "Updated test project long description",
+      source: "Updated source",
       date_created: new Date(2015, 1, 1),
       date_updated: new Date(2015, 2, 2)
     };
@@ -109,7 +115,7 @@ describe('Projects', function() {
               throw err;
 
             res.body._id.should.equal(objectId);
-            res.body.name.should.equal('Updated project name');
+            res.body.title.should.equal('Updated project title');
             done();
           })
       })

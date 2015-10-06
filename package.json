@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ci-tests": "istanbul cover mocha -- -R tap \"test/*.js\" > test.tap && istanbul report clover"
+    "ci-tests": "istanbul cover mocha -- -R tap \"test/*.js\" > test.tap && istanbul report clover",
+    "mongo-express": "./node_modules/mongo-express/ && node app.js"
   },
   "repository": {
     "type": "git",

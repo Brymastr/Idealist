@@ -1,0 +1,4 @@
+MongoDB:
+mongo
+use idealist
+db.projects.remove({})
