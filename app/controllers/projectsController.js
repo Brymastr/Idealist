@@ -62,12 +62,21 @@ exports.putProject = function(req, res) {
   });
 };
 
+// PATCH /api/:id
+exports.patchProject = function(req, res) {
+  Project.findByIdAndUpdate({_id: req.params.id}, {$set: req.body}, function(err, project){
+    if(err)
+      res.send(err);
+    res.json(project);
+  });
+};
+
 // DELETE /api/:id
 exports.deleteProject = function(req, res) {
 
   Project.findOneAndRemove({_id: req.params.id}, function (err, project) {
     if (!err && res != null) {
-      console.log(res);
+      //console.log(res);
       res.status(200).json({status:"ok"})
     } else
       res.send(err.message);

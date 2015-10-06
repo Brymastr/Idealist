@@ -18,6 +18,7 @@ module.exports = function(app, passport) {
 
   app.route('/api/projects/:id')
     .get(ProjectsController.getProject)
+    .patch(ProjectsController.patchProject)
     .delete(ProjectsController.deleteProject);
 
   // Auth routes

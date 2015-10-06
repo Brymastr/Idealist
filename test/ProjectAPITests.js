@@ -38,8 +38,7 @@ describe('Projects', function() {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
-        if(err)
-          throw err;
+        if(err) throw err;
         res.body.should.have.property('_id');
         res.body.title.should.equal('Test project title');
         res.body.summary.should.equal('Summary of the project');
@@ -56,8 +55,7 @@ describe('Projects', function() {
       .get('api/projects')
       .expect(200)
       .end(function(err, res) {
-        if(err)
-          throw err;
+        if(err) throw err;
 
         res.body.should.not.be.empty;
         done();
@@ -71,8 +69,7 @@ describe('Projects', function() {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
-        if(err)
-          throw err;
+        if(err) throw err;
 
         res.body.should.have.property('_id');
         res.body.title.should.equal('Test project title');
@@ -85,7 +82,7 @@ describe('Projects', function() {
   });
 
   // PUT
-  it('should update the project title', function(done) {
+  it('should update core project fields', function(done) {
 
     var project = {
       _id: objectId,
@@ -103,22 +100,50 @@ describe('Projects', function() {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
-        if(err)
-          throw err;
+        if(err) throw err;
 
         request(baseUrl)
           .get('api/projects/' + objectId)
           .expect(200)
           .expect('Content-Type', /json/)
           .end(function(err, res) {
-            if(err)
-              throw err;
+            if(err) throw err;
 
             res.body._id.should.equal(objectId);
             res.body.title.should.equal('Updated project title');
+            res.body.summary.should.equal('Updated summary of the project');
+            res.body.description.should.equal('Updated test project long description');
+            res.body.source.should.equal('Updated source');
             done();
           })
       })
+  });
+
+  // PATCH
+  it('should only update the description', function(done) {
+    var update = {
+      description: "PATCHED"
+    };
+
+    request(baseUrl)
+      .patch('api/projects/' + objectId)
+      .send(update)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if(err) throw err;
+
+        request(baseUrl)
+          .get('api/projects/' + objectId)
+          .expect(200)
+          .end(function(err, res) {
+            if(err) throw err;
+            res.body._id.should.equal(objectId);
+            res.body.title.should.equal('Updated project title'); // Shouldn't change
+            res.body.description.should.equal('PATCHED');
+            done();
+          });
+      });
   });
 
   // DELETE
@@ -127,8 +152,7 @@ describe('Projects', function() {
       .delete('api/projects/' + objectId)
       .expect(200)
       .end(function(err, res) {
-        if(err)
-          throw err;
+        if(err) throw err;
 
         request(baseUrl)
           .get('api/projects/' + objectId)
