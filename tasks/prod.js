@@ -16,7 +16,10 @@ gulp.task('config', ['clean'], function() {
 });
 
 gulp.task('auth', ['clean'], function() {
-  return gulp.src(['./config/passport.js', './config/auth.js'])
+  return gulp.src([
+    './config/passport.js',
+    './config/auth.js'
+  ])
     .pipe(plugins.uglify({mangle: false}))
     .pipe(gulp.dest('dist/config/'));
 });

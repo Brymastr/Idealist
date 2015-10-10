@@ -4,7 +4,7 @@
 var config = require('../../config/config');
 
 var Project = require('../models/Project');
-var User = require('../models/Users');
+var User = require('../models/User');
 
 // GET /api/
 exports.getProjects = function(req, res) {

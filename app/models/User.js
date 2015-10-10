@@ -3,17 +3,16 @@
  */
 
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId;
 var bcrypt = require('bcrypt');
 
-var userSchema = mongoose.Schema({
+var userSchema = Schema({
     username: String,
     firstName: String,
     lastName: String,
     email: String,
     password: String,
-    projects : [
-      {projectId: Number}
-    ],
     passwordChangeToken: String,
     dateUpdated: Date,
     dateCreated: Date,
