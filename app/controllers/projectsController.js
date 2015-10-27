@@ -1,8 +1,4 @@
-/**
- * Created by Brycen on 2015-06-10.
- */
 var config = require('../../config/config');
-
 var Project = require('../models/Project');
 var User = require('../models/User');
 

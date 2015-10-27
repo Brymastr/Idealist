@@ -9,3 +9,5 @@ build/
 dist/
 
 .idea/
+
+migrations/.migrate

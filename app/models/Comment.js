@@ -1,6 +1,3 @@
-/**
- * Created by Danny on 2015-10-01.
- */
 var config = require('../../config/config');
 
 var mongoose = require('mongoose');

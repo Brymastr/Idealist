@@ -1,7 +1,3 @@
-/**
- * Created by Brycen on 2015-06-12.
- */
-
 var assert = require('assert');
 var should = require('should');
 var request = require('supertest');
@@ -9,7 +5,7 @@ var mongoose = require('mongoose');
 var config = require('../config/config');
 
 describe('Projects', function() {
-  var baseUrl = "http://localhost:9000/";
+  var baseUrl = config.url;
   var objectId = null;
 
 

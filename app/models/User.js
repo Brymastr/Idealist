@@ -1,7 +1,3 @@
-/**
- * Created by Brycen on 2015-06-10.
- */
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId;

@@ -1,6 +1,3 @@
-/**
- * Created by Brycen on 2015-06-10.
- */
 var config = require('../../config/config');
 // Project model
 
@@ -15,10 +12,10 @@ var projectSchema = Schema({
     type: ObjectId,
     ref: 'User'
   },
-  collaborators: {
+  collaborators: [{
     type: ObjectId,
     ref: 'User'
-  },
+  }],
   summary: String,                // brief summary
   description: String,            // longer description
   images: [String],               // list of image attachments
@@ -35,7 +32,7 @@ var projectSchema = Schema({
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'Comment'
-  }],// list of comment objects referenced by commentId
+  }],                             // list of comment objects referenced by commentId
   visibility: Number,             // 0:private, 1:protected(team), 2:public
   date_created: Date,             // date the project was created in app
   date_updated: Date              // date if updated

@@ -1,15 +1,15 @@
 {
   "name": "Idealist",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ci-tests": "istanbul cover mocha -- -R tap \"test/*.js\" > test.tap && istanbul report clover",
-    "mongo-express": "./node_modules/mongo-express/ && node app.js"
+    "migrate": "migrate up",
+    "unmigrate": "migrate down"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Brymastr/Idealist.git"
+    "url": "https://github.com/Brymastr/idealist-api.git"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "express": "^4.12.4",
     "express-session": "^1.11.3",
     "method-override": "^2.3.3",
+    "mocha": "^2.3.3",
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3",
     "passport": "^0.2.2",
@@ -42,6 +43,7 @@
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
     "istanbul": "^0.3.17",
+    "migrate": "^0.2.2",
     "mocha": "^2.2.5",
     "require-dir": "^0.3.0",
     "should": "^6.0.3",
