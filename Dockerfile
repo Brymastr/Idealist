@@ -9,7 +9,6 @@ RUN gulp build-prod
 WORKDIR /src/dist
 
 RUN npm install
-RUN bower install --allow-root
 
 EXPOSE 80
 CMD ["pm2", "start", "server.js"]
