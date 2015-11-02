@@ -3,13 +3,13 @@ FROM node:onbuild
 WORKDIR /src
 ADD . /src
 
-RUN npm install -g pm2 gulp
-RUN npm install --dev
+RUN npm install -g gulp
+RUN npm install --only=dev
 RUN gulp build-prod
 
 WORKDIR /src/dist
 
-RUN npm install --production
+RUN npm install --only=prod
 
 EXPOSE 80
-CMD ["pm2", "start", "server.js"]
+CMD ["node", "server.js"]
