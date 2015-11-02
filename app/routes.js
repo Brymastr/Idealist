@@ -6,7 +6,7 @@ var config = require('../config/config');
 var Project = require('./models/Project');
 
 // Load controllers
-var ProjectsController = require('./controllers/ProjectsController');
+var ProjectsController = require('./controllers/projectsController');
 
 module.exports = function(app, passport) {
 
