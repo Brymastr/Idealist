@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "migrate": "migrate up",
-    "unmigrate": "migrate down"
+    "unmigrate": "migrate down",
+    "docker": "docker build -t idealist-api-staging ."
   },
   "repository": {
     "type": "git",

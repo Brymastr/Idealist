@@ -1,7 +1,7 @@
 FROM node:onbuild
 
 WORKDIR /src
-ADD . /src
+COPY . /src
 
 RUN npm install -g gulp
 RUN npm install --only=dev
