@@ -4,7 +4,7 @@ var User = require('../models/User');
 
 // GET /api/
 exports.getProjects = function(req, res) {
-  // Get all projects from the database
+  // Get all projects from the database TODO: for current user
   Project.find({}, function(err, projects) {
     if(err == null) {
       res.json(projects);

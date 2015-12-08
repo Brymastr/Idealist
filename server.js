@@ -25,8 +25,6 @@ app.use(methodOverride());
 app.use(session({
   secret: config.secret
 }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 // MongoDB connection
 mongoose.connect(config.db);
@@ -37,8 +35,13 @@ mongoose.connection.on('open', function() {
 
 require('./config/passport')(passport);
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Express routing
-require('./app/routes')(app, passport);
+var routes = require('./app/routes')(passport);
+
+app.use('/api', routes);
 
 http.createServer(app).listen(config.port, function() {
   console.log("server listening on port " + config.port);
