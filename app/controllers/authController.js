@@ -8,7 +8,6 @@ var passport = require('passport');
 // does user have access
 exports.hasAccess = function(req, res, next) {
   // get logged in user
-  console.log(req);
   return next();
 
   // check if user is granted access

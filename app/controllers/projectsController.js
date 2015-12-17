@@ -17,7 +17,6 @@ exports.getProjects = function(req, res) {
 // GET /api/:id
 exports.getProject = function(req, res) {
   Project.findOne({_id: req.params.id}, function(err, project) {
-    console.log(project);
     if(project == null)
       res.sendStatus(204);
     else if(!err)
