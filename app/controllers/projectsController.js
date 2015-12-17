@@ -6,10 +6,10 @@ var User = require('../models/User');
 exports.getProjects = function(req, res) {
   // Get all projects from the database TODO: for current user
   Project.find({}, function(err, projects) {
-    if(err == null) {
-      res.json(projects);
-    } else {
+    if(err) {
       res.send(err.message);
+    } else {
+      res.json(projects);
     }
   })
 };
@@ -17,17 +17,18 @@ exports.getProjects = function(req, res) {
 // GET /api/:id
 exports.getProject = function(req, res) {
   Project.findOne({_id: req.params.id}, function(err, project) {
-    if(project == null)
-      res.sendStatus(204);
-    else if(!err)
-      res.json(project);
-    else
+    if(err) {
       res.send(err.message);
+    } else if(!project) {
+      res.sendStatus(204);
+    } else {
+      res.json(project);
+    }
   });
 };
 
 // POST /api/
-exports.postProject = function(req, res) {
+exports.createProject = function(req, res) {
   new Project({
     title: req.body.title,
     summary: req.body.summary,
@@ -50,7 +51,7 @@ exports.postProject = function(req, res) {
 };
 
 // PUT /api/
-exports.putProject = function(req, res) {
+exports.updateProject = function(req, res) {
   Project.findByIdAndUpdate(req.body._id, req.body, function(err, project) {
     if(err)
       res.send(err);
@@ -59,7 +60,7 @@ exports.putProject = function(req, res) {
 };
 
 // PATCH /api/:id
-exports.patchProject = function(req, res) {
+exports.patchUpdateProject = function(req, res) {
   Project.findByIdAndUpdate({_id: req.params.id}, {$set: req.body}, function(err, project){
     if(err) res.send(err);
     res.json(project);

@@ -7,6 +7,7 @@ var express = require('express');
 // Load controllers
 var ProjectsController = require('./controllers/projectsController');
 var AuthController = require('./controllers/authController');
+var UsersController = require('./controllers/usersController');
 
 module.exports = function(passport) {
 
@@ -15,8 +16,8 @@ module.exports = function(passport) {
   // Project routes
   router.route('/projects')
     .get(AuthController.hasAccess, ProjectsController.getProjects)
-    .post(ProjectsController.postProject)
-    .put(ProjectsController.putProject);
+    .post(ProjectsController.createProject)
+    .put(ProjectsController.updateProject);
 
   router.route('/authtest')
     .get(AuthController.isAuthenticated, function(req, res) {
@@ -25,7 +26,7 @@ module.exports = function(passport) {
 
   router.route('/projects/:id')
     .get(ProjectsController.getProject)
-    .patch(ProjectsController.patchProject)
+    .patch(ProjectsController.patchUpdateProject)
     .delete(ProjectsController.deleteProject);
 
   // User routes
@@ -38,9 +39,11 @@ module.exports = function(passport) {
   router.route('/logout')
     .post(AuthController.localLogout);
 
-  //app.route('/api/users/:id')
-  //  .get(UsersController.getUser)
-  //  .delete(UsersController.deleteUser);
+  router.route('/users')
+    .get(UsersController.getUsers);
+
+  router.route('/users/:id')
+    .get(UsersController.getUser);
 
 
   // Anything else should go to angular routes
