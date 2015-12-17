@@ -2,6 +2,9 @@ var config = require('../../config/config');
 var Project = require('../models/Project');
 var User = require('../models/User');
 
+// passport
+var passport = require('passport');
+
 // does user have access
 exports.hasAccess = function(req, res, next) {
   // get logged in user
@@ -31,7 +34,8 @@ exports.localSignup = function(req, res) {
 };
 
 exports.isAuthenticated = function(req, res, next) {
-  if(req.isAuthenticated()) {
+  if(req.user) {
+    res.send('Successfuly authenticated');
     return next();
   }
   res.send('Not logged in');

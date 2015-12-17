@@ -9,6 +9,7 @@ var ProjectsController = require('./controllers/projectsController');
 var AuthController = require('./controllers/authController');
 
 module.exports = function(passport) {
+
   var router = express.Router();
 
   // Project routes
@@ -19,7 +20,7 @@ module.exports = function(passport) {
 
   router.route('/authtest')
     .get(AuthController.isAuthenticated, function(req, res) {
-      res.redirect('/poop');
+      res.send('Got past authentication: ' + req);
     });
 
   router.route('/projects/:id')
@@ -27,12 +28,12 @@ module.exports = function(passport) {
     .patch(ProjectsController.patchProject)
     .delete(ProjectsController.deleteProject);
 
-  // Auth routes
-  router.route('/signup')
-    .post(AuthController.localSignup);
+  // User routes
+  router.route('/users')
+    .post(AuthController.localSignup(passport));
 
   router.route('/login')
-    .post(AuthController.localLogin);
+    .post(AuthController.localLogin(passport));
 
   //app.route('/api/users/:id')
   //  .get(UsersController.getUser)

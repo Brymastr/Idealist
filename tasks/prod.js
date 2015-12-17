@@ -9,7 +9,7 @@ gulp.task('build', ['clean'], function() {
 });
 
 gulp.task('config', ['clean'], function() {
-  return gulp.src(['./config/config.prod.js'])
+  return gulp.src(['./config/config.staging.js'])
     .pipe(plugins.uglify({mangle: false}))
     .pipe(plugins.rename('config.js'))
     .pipe(gulp.dest('dist/config/'));
