@@ -20,7 +20,7 @@ module.exports = function(passport) {
 
   router.route('/authtest')
     .get(AuthController.isAuthenticated, function(req, res) {
-      res.send('Got past authentication: ' + req);
+      res.send('Logged in');
     });
 
   router.route('/projects/:id')
@@ -33,7 +33,10 @@ module.exports = function(passport) {
     .post(AuthController.localSignup(passport));
 
   router.route('/login')
-    .post(AuthController.localLogin(passport));
+    .post(AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
+
+  router.route('/logout')
+    .post(AuthController.localLogout);
 
   //app.route('/api/users/:id')
   //  .get(UsersController.getUser)

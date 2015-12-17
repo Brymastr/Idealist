@@ -17,25 +17,26 @@ exports.hasAccess = function(req, res, next) {
 
 exports.localLogin = function(req, res) {
   return passport.authenticate('local-login', {
-    successRedirect: '/profile',
-    failureRedirect: '/login',
+    successFlash: 'Welcome!',
     failureFlash: 'Incorrect username or password.'
   })
 };
 
 exports.localSignup = function(req, res) {
   return passport.authenticate('local-signup', {
-    successRedirect: '/profile',
-    failureRedirect: '/signup',
     failureFlash: true,
     successFlash: 'Success!'
   })
 };
 
 exports.isAuthenticated = function(req, res, next) {
-  if(req.user) {
-    res.send('Successfuly authenticated');
+  if(req.isAuthenticated()) {
     return next();
   }
-  res.send('Not logged in');
+  res.send(401);
+};
+
+exports.localLogout = function(req, res) {
+  req.logOut();
+  res.send(200);
 };
