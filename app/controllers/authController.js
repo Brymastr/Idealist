@@ -5,16 +5,6 @@ var User = require('../models/User');
 // passport
 var passport = require('passport');
 
-// does user have access
-exports.hasAccess = function(req, res, next) {
-  // get logged in user
-  return next();
-
-  // check if user is granted access
-
-  //return result
-};
-
 exports.localLogin = function(req, res) {
   return passport.authenticate('local-login', {
     successFlash: 'Welcome!',

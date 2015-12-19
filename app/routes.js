@@ -15,7 +15,7 @@ module.exports = function(passport) {
 
   // Project routes
   router.route('/projects')
-    .get(AuthController.hasAccess, ProjectsController.getProjects)
+    .get(AuthController.isAuthenticated, ProjectsController.getProjects)
     .post(ProjectsController.createProject)
     .put(ProjectsController.updateProject);
 
