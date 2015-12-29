@@ -13,25 +13,22 @@ module.exports = function(passport) {
 
   var router = express.Router();
 
-  // Project routes
-  router.route('/projects')
-    .get(AuthController.isAuthenticated, ProjectsController.getProjects)
-    .post(ProjectsController.createProject)
-    .put(ProjectsController.updateProject);
-
+  // TODO: maybe remove when done testing
   router.route('/authtest')
     .get(AuthController.isAuthenticated, function(req, res) {
       res.send('Logged in');
     });
 
-  router.route('/projects/:id')
-    .get(ProjectsController.getProject)
-    .patch(ProjectsController.patchUpdateProject)
-    .delete(ProjectsController.deleteProject);
+  // Project routes
+  router.route('/projects')
+    .get(AuthController.isAuthenticated, ProjectsController.getProjects)
+    .post(AuthController.isAuthenticated, ProjectsController.createProject)
+    .put(AuthController.isAuthenticated, ProjectsController.updateProject);
 
-  // User routes
-  router.route('/users')
-    .post(AuthController.localSignup(passport));
+  router.route('/projects/:id')
+    .get(ProjectsController.getProject)// TODO: AuthController.isAuthenticated when not testing
+    .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject)
+    .delete(AuthController.isAuthenticated, ProjectsController.deleteProject);
 
   router.route('/login')
     .post(AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
@@ -40,15 +37,16 @@ module.exports = function(passport) {
     .post(AuthController.localLogout);
 
   router.route('/users')
-    .get(UsersController.getUsers);
+    .get(UsersController.getUsers)// TODO: remove when happy with signup and login
+    .post(AuthController.localSignup(passport), AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
 
   router.route('/users/:id')
-    .get(UsersController.getUser);
+    .get(AuthController.isAuthenticated, UsersController.getUser);
 
 
   // Anything else should go to angular routes
   router.get('*', function(req, res) {
-    res.send('Invalid api route or Angular route. Route received > ' + req.protocol + '://' + req.get('host') + req.originalUrl);
+    res.send('Invalid api route or Angular route: ' + req.protocol + '://' + req.get('host') + req.originalUrl);
   });
 
   return router;

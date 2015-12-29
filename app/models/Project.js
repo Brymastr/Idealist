@@ -12,7 +12,7 @@ var projectSchema = Schema({
     type: ObjectId,
     ref: 'User'
   },
-  collaborators: [{
+  contributors: [{
     type: ObjectId,
     ref: 'User'
   }],
