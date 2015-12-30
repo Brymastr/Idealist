@@ -2,10 +2,9 @@ var config = require('../../config/config');
 var Project = require('../models/Project');
 var User = require('../models/User');
 
-// GET /api/
+// GET /api/projects
 exports.getProjects = function(req, res) {
-  // Get all projects from the database TODO: for current user
-  Project.find({}, function(err, projects) {
+  Project.find({owner: req.user._id}, function(err, projects) {
     if(err) {
       res.send(err.message);
     } else {
@@ -14,9 +13,9 @@ exports.getProjects = function(req, res) {
   })
 };
 
-// GET /api/:id
+// GET /api/projects/:id
 exports.getProject = function(req, res) {
-  Project.findOne({_id: req.params.id}, function(err, project) {
+  Project.findOne({_id: req.params.id, owner: req.user}, function(err, project) {
     if(err) {
       res.send(err.message);
     } else if(!project) {
@@ -27,9 +26,10 @@ exports.getProject = function(req, res) {
   });
 };
 
-// POST /api/
+// POST /api/projects
 exports.createProject = function(req, res) {
   new Project({
+    owner: req.user,
     title: req.body.title,
     summary: req.body.summary,
     description: req.body.description,
@@ -50,7 +50,7 @@ exports.createProject = function(req, res) {
     });
 };
 
-// PUT /api/
+// PUT /api/projects
 exports.updateProject = function(req, res) {
   Project.findByIdAndUpdate(req.body._id, req.body, function(err, project) {
     if(err)
@@ -59,7 +59,7 @@ exports.updateProject = function(req, res) {
   });
 };
 
-// PATCH /api/:id
+// PATCH /api/projects/:id
 exports.patchUpdateProject = function(req, res) {
   Project.findByIdAndUpdate({_id: req.params.id}, {$set: req.body}, function(err, project){
     if(err) res.send(err);
@@ -67,7 +67,7 @@ exports.patchUpdateProject = function(req, res) {
   });
 };
 
-// DELETE /api/:id
+// DELETE /api/projects/:id
 exports.deleteProject = function(req, res) {
   Project.findOneAndRemove({_id: req.params.id}, function (err, project) {
     if (!err && res != null) {
