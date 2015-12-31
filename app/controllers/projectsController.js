@@ -52,7 +52,7 @@ exports.createProject = function(req, res) {
 
 // PUT /api/projects
 exports.updateProject = function(req, res) {
-  Project.findByIdAndUpdate(req.body._id, req.body, function(err, project) {
+  Project.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, project) {
     if(err)
       res.send(err);
     res.json(project);
@@ -61,7 +61,7 @@ exports.updateProject = function(req, res) {
 
 // PATCH /api/projects/:id
 exports.patchUpdateProject = function(req, res) {
-  Project.findByIdAndUpdate({_id: req.params.id}, {$set: req.body}, function(err, project){
+  Project.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function(err, project) {
     if(err) res.send(err);
     res.json(project);
   });
