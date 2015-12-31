@@ -2,6 +2,8 @@ var config = require('../../config/config');
 var Project = require('../models/Project');
 var User = require('../models/User');
 
+var AuthController = require('./authController');
+
 // GET /api/projects
 exports.getProjects = function(req, res) {
   Project.find({owner: req.user._id}, function(err, projects) {
@@ -71,16 +73,22 @@ exports.patchUpdateProject = function(req, res) {
 exports.deleteProject = function(req, res) {
   Project.findOneAndRemove({_id: req.params.id}, function (err, project) {
     if (!err && res != null) {
-      //console.log(res);
       res.status(200).json({status:"ok"})
     } else
       res.send(err.message);
   });
 };
 
-exports.hasProjectPermission = function(req, res) {
-  User.findByIdAndUpdate({_id: req.user}, function(err, user) {
+
+//** Other functions **//
+
+// Upvote a project
+exports.upvote = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
     if(err) res.send(err);
-    return user.indexOf(req.body._id > -1);
+
+
   });
 };
+
+// Downvote a project

@@ -19,6 +19,11 @@ module.exports = function(passport) {
       res.send('Logged in');
     });
 
+  router.route('/accesstest/:id')
+    .get(AuthController.hasAccess, function(req, res) {
+      res.send('Access granted');
+    });
+
   // Project routes
   router.route('/projects')
     .get(AuthController.isAuthenticated, ProjectsController.getProjects)
@@ -26,9 +31,9 @@ module.exports = function(passport) {
     .put(AuthController.isAuthenticated, ProjectsController.updateProject);
 
   router.route('/projects/:id')
-    .get(ProjectsController.getProject)// TODO: AuthController.isAuthenticated when not testing
+    .get(AuthController.isAuthenticated, ProjectsController.getProject)
     .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject)
-    .delete(AuthController.isAuthenticated, ProjectsController.deleteProject);
+    .delete(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.deleteProject);
 
   router.route('/login')
     .post(AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
