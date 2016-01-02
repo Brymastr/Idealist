@@ -86,7 +86,7 @@ exports.deleteProject = function(req, res) {
 exports.upvote = function(req, res) {
   Project.findById(req.params.id, function(err, project) {
     if(err) res.send(err);
-
+    
 
   });
 };

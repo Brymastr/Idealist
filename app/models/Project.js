@@ -25,8 +25,8 @@ var projectSchema = Schema({
   ownerUpvote: Number,            // count of upvotes by owner
   ownerDownvote: Number,          // count of downvotes by owner
   publicFeasibility: Number,      // rank out of 10
-  publicUpvotes: Number,          // count of public upvotes
-  publicDownvotes: Number,        // count of public downvotes
+  upvoted: Number,                // list of users who have upvoted the project
+  downvoted: Number,              // list of users who have downvoted the project
   pointsEstimate: Number,         // broad time estimate for project completion
   source: String,                 // where the idea came from
   comments: [{

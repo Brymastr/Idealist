@@ -42,15 +42,11 @@ exports.hasAccess = function(req, res) {
 
     var found = false;
 
-    if(!project.owner.equals(req.user._id)) {
+    if(project.owner.equals(req.user._id)) {
       found = true
     } else {
-      for (var i = 0; i < project.contributors.length; i++) {
-        console.log( project.contributors[i]);
-        if (req.user._id.equals(project.contributors[i])) {
-          found = true;
-          break;
-        }
+      if(project.contributors.indexOf(req.user._id) != -1) {
+        found = true;
       }
     }
     if(!found) res.sendStatus(403);
