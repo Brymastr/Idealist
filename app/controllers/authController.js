@@ -40,16 +40,12 @@ exports.hasAccess = function(req, res) {
       return false;
     }
 
-    var found = false;
-
     if(project.owner.equals(req.user._id)) {
-      found = true
+      return next();
+    } else if(project.contributors.indexOf(req.user._id) != -1) {
+      return next();
     } else {
-      if(project.contributors.indexOf(req.user._id) != -1) {
-        found = true;
-      }
+      res.sendStatus(403);
     }
-    if(!found) res.sendStatus(403);
-    return found;
   });
 };

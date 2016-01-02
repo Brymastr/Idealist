@@ -2,8 +2,6 @@ var config = require('../../config/config');
 var Project = require('../models/Project');
 var User = require('../models/User');
 
-var AuthController = require('./authController');
-
 // GET /api/projects
 exports.getProjects = function(req, res) {
   Project.find({owner: req.user._id}, function(err, projects) {
@@ -55,8 +53,7 @@ exports.createProject = function(req, res) {
 // PUT /api/projects
 exports.updateProject = function(req, res) {
   Project.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, project) {
-    if(err)
-      res.send(err);
+    if(err) res.send(err.message);
     res.json(project);
   });
 };
@@ -64,7 +61,7 @@ exports.updateProject = function(req, res) {
 // PATCH /api/projects/:id
 exports.patchUpdateProject = function(req, res) {
   Project.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function(err, project) {
-    if(err) res.send(err);
+    if(err) res.send(err.message);
     res.json(project);
   });
 };
@@ -82,13 +79,52 @@ exports.deleteProject = function(req, res) {
 
 //** Other functions **//
 
-// Upvote a project
-exports.upvote = function(req, res) {
+// Upvote a project (public)
+exports.publicUpvote = function(req, res) {
   Project.findById(req.params.id, function(err, project) {
-    if(err) res.send(err);
-    
+    if(err) res.send(err.message);
 
+    // If user had previously downvoted then remove the downvote
+    var downvoteIndex = project.downvoted.indexOf(req.user._id);
+    if(downvoteIndex != -1) {
+      project.downvoted.splice(downvoteIndex, 1);
+    }
+
+    // Only upvote if user hasn't already upvoted
+    var upvoteIndex = project.upvoted.indexOf(req.user._id);
+    if(upvoteIndex != -1) {
+      res.send(403);
+    } else {
+      project.upvoted.push(req.user);
+      project.save(function(err, result) {
+        if(err) res.send(err.message);
+        res.json(result);
+      });
+    }
   });
 };
 
 // Downvote a project
+exports.publicDownvote = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    // If user had previously upvoted then remove the upvote
+    var upvoteIndex = project.upvoted.indexOf(req.user._id);
+    if(upvoteIndex != -1) {
+      project.upvoted.splice(upvoteIndex, 1);
+    }
+
+    // Only downvote if user hasn't already downvoted
+    var downvoteIndex = project.downvoted.indexOf(req.user._id);
+    if(downvoteIndex != -1) {
+      res.send(403);
+    } else {
+      project.downvoted.push(req.user);
+      project.save(function(err, result) {
+        if(err) res.send(err.message);
+        res.json(result);
+      });
+    }
+  });
+};
