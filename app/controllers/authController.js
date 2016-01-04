@@ -32,8 +32,7 @@ exports.localLogout = function(req, res) {
 };
 
 exports.hasAccess = function(req, res) {
-  //given a project id and a user id, check if user has permission to access project
-  User.findOne({_id: req.params.id}, function(err, project) {
+  Project.findOne({_id: req.params.id}, function(err, project) {
     if(err) {
       res.send(err.message);
     } else if(!project) {
@@ -41,19 +40,12 @@ exports.hasAccess = function(req, res) {
       return false;
     }
 
-    var found = false;
-
-    if(project.owner == req.user) {
-      found = true
+    if(project.owner.equals(req.user._id)) {
+      return next();
+    } else if(project.contributors.indexOf(req.user._id) != -1) {
+      return next();
     } else {
-      for (var i in project.contributors) {
-        if (req.user == i) {
-          found = true;
-          break;
-        }
-      }
+      res.sendStatus(403);
     }
-    if(!found) res.sendStatus(403); // If not owner or contributor return forbidden
-    return found;
   });
 };

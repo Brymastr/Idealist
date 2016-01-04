@@ -52,17 +52,16 @@ exports.createProject = function(req, res) {
 
 // PUT /api/projects
 exports.updateProject = function(req, res) {
-  Project.findByIdAndUpdate(req.body._id, req.body, function(err, project) {
-    if(err)
-      res.send(err);
+  Project.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, project) {
+    if(err) res.send(err.message);
     res.json(project);
   });
 };
 
 // PATCH /api/projects/:id
 exports.patchUpdateProject = function(req, res) {
-  Project.findByIdAndUpdate({_id: req.params.id}, {$set: req.body}, function(err, project){
-    if(err) res.send(err);
+  Project.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true}, function(err, project) {
+    if(err) res.send(err.message);
     res.json(project);
   });
 };
@@ -71,16 +70,61 @@ exports.patchUpdateProject = function(req, res) {
 exports.deleteProject = function(req, res) {
   Project.findOneAndRemove({_id: req.params.id}, function (err, project) {
     if (!err && res != null) {
-      //console.log(res);
       res.status(200).json({status:"ok"})
     } else
       res.send(err.message);
   });
 };
 
-exports.hasProjectPermission = function(req, res) {
-  User.findByIdAndUpdate({_id: req.user}, function(err, user) {
-    if(err) res.send(err);
-    return user.indexOf(req.body._id > -1);
+
+//** Other functions **//
+
+// Upvote a project (public)
+exports.publicUpvote = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    // If user had previously downvoted then remove the downvote
+    var downvoteIndex = project.downvoted.indexOf(req.user._id);
+    if(downvoteIndex != -1) {
+      project.downvoted.splice(downvoteIndex, 1);
+    }
+
+    // Only upvote if user hasn't already upvoted
+    var upvoteIndex = project.upvoted.indexOf(req.user._id);
+    if(upvoteIndex != -1) {
+      res.send(403);
+    } else {
+      project.upvoted.push(req.user);
+      project.save(function(err, result) {
+        if(err) res.send(err.message);
+        res.json(result);
+      });
+    }
+  });
+};
+
+// Downvote a project
+exports.publicDownvote = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    // If user had previously upvoted then remove the upvote
+    var upvoteIndex = project.upvoted.indexOf(req.user._id);
+    if(upvoteIndex != -1) {
+      project.upvoted.splice(upvoteIndex, 1);
+    }
+
+    // Only downvote if user hasn't already downvoted
+    var downvoteIndex = project.downvoted.indexOf(req.user._id);
+    if(downvoteIndex != -1) {
+      res.send(403);
+    } else {
+      project.downvoted.push(req.user);
+      project.save(function(err, result) {
+        if(err) res.send(err.message);
+        res.json(result);
+      });
+    }
   });
 };

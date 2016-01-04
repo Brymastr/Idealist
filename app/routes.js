@@ -19,6 +19,12 @@ module.exports = function(passport) {
       res.send('Logged in');
     });
 
+  router.route('/accesstest/:id')
+    .get(AuthController.hasAccess, function(req, res) {
+      res.send('Access granted');
+    });
+
+
   // Project routes
   router.route('/projects')
     .get(AuthController.isAuthenticated, ProjectsController.getProjects)
@@ -26,16 +32,25 @@ module.exports = function(passport) {
     .put(AuthController.isAuthenticated, ProjectsController.updateProject);
 
   router.route('/projects/:id')
-    .get(ProjectsController.getProject)// TODO: AuthController.isAuthenticated when not testing
+    .get(AuthController.isAuthenticated, ProjectsController.getProject)
     .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject)
-    .delete(AuthController.isAuthenticated, ProjectsController.deleteProject);
+    .delete(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.deleteProject);
 
+  router.route('/projects/upvote/:id')
+    .post(AuthController.isAuthenticated, ProjectsController.publicUpvote);
+
+  router.route('/projects/downvote/:id')
+    .post(AuthController.isAuthenticated, ProjectsController.publicDownvote);
+
+  // Auth routes
   router.route('/login')
     .post(AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
 
   router.route('/logout')
     .post(AuthController.localLogout);
 
+
+  // User routes
   router.route('/users')
     .get(UsersController.getUsers)// TODO: remove when happy with signup and login
     .post(AuthController.localSignup(passport), AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
@@ -46,6 +61,7 @@ module.exports = function(passport) {
 
   // Anything else should go to angular routes
   router.get('*', function(req, res) {
+    // TODO: forward to angular routes
     res.send('Invalid api route or Angular route: ' + req.protocol + '://' + req.get('host') + req.originalUrl);
   });
 
