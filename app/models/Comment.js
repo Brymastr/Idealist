@@ -1,16 +1,17 @@
 var config = require('../../config/config');
 
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId;
 
-var commentSchema = mongoose.Schema({
+var commentSchema = Schema({
   body: String,
   owner: {
-    type: Schema.Type.ObjectId,
+    type: ObjectId,
     ref: 'User'
   },
-  createDate: Date,
-  updatedDate: Date,
-  feasibilityRating: Number
+  date_created: Date,
+  date_updated: Date
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

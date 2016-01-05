@@ -46,6 +46,8 @@ exports.hasAccess = function(req, res, next) {
       return next();
     } else if(project.contributors.indexOf(req.user._id) != -1) {
       return next();
+    } else if(project.visibility == 2) {
+      return next();
     } else {
       res.send(403);
       return false;

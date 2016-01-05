@@ -34,7 +34,7 @@ module.exports = function(passport) {
   router.route('/projects/:id')
     .get(AuthController.isAuthenticated, ProjectsController.getProject)
     .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject)
-    .delete(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.deleteProject);
+    .delete(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.deleteProject);
 
   router.route('/projects/upvote/:id')
     .post(AuthController.isAuthenticated, ProjectsController.publicUpvote);
@@ -47,6 +47,12 @@ module.exports = function(passport) {
 
   router.route('/projects/removeContributor/:id')
     .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.removeContributor);
+
+  router.route('/projects/addComment/:id')
+    .post(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.addComment);
+
+  router.route('/projects/removeComment/:id')
+    .post(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.removeComment);
 
 
   // Auth routes

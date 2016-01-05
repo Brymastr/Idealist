@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
   ObjectId = Schema.ObjectId;
 var User = require('./User');
+var Comment = require('./Comment').schema;
 
 var projectSchema = Schema({
   title: String,                  // project name
@@ -35,10 +36,7 @@ var projectSchema = Schema({
   }],
   pointsEstimate: Number,         // broad time estimate for project completion
   source: String,                 // where the idea came from
-  comments: [{                    // list of public comments
-    type: Schema.Types.ObjectId,
-    ref: 'Comment'
-  }],                             // list of comment objects referenced by commentId
+  comments: [Comment],            // list of public comments
   visibility: Number,             // 0:private, 1:protected(team), 2:public
   date_created: Date,             // date the project was created in app
   date_updated: Date              // date if updated

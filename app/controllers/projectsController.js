@@ -1,7 +1,7 @@
 var config = require('../../config/config');
 var Project = require('../models/Project');
 var User = require('../models/User');
-var mongoose = require('mongoose');
+var Comment = require('../models/Comment');
 
 // GET /api/projects
 exports.getProjects = function(req, res) {
@@ -168,3 +168,41 @@ exports.removeContributor = function(req, res) {
   });
 };
 
+// Add a comment
+exports.addComment = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    var comment = Comment({
+      body: req.body.body,
+      owner: req.user,
+      date_created: new Date(),
+      date_updated: new Date()
+    });
+
+    project.comments.push(comment);
+    project.save(function(err, result) {
+      if(err) res.send(err.message);
+      res.json(result);
+    })
+  })
+};
+
+exports.removeComment = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    var commentIndex = project.comments.indexOf(req.body.comment);
+    if(commentIndex == -1) {
+      res.send(200);
+    } else if(project.comments[commentIndex].owner != req.user._id) {
+      res.send(403);
+    } else {
+      project.comments.splice(commentIndex, 1);
+      project.save(function(err, result) {
+        if(err) res.send(err.message);
+        res.json(result);
+      });
+    }
+  });
+};
