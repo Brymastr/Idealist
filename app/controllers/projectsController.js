@@ -1,6 +1,7 @@
 var config = require('../../config/config');
 var Project = require('../models/Project');
 var User = require('../models/User');
+var mongoose = require('mongoose');
 
 // GET /api/projects
 exports.getProjects = function(req, res) {
@@ -39,8 +40,8 @@ exports.createProject = function(req, res) {
 
     ownerUpvotes: 0,
     ownerDownvotes: 0,
-    publicUpvotes: 0,
-    publicDownvotes: 0,
+    upvoted: 0,
+    downvoted: 0,
     date_created: new Date(),
     date_updated: new Date()
   })
@@ -93,7 +94,9 @@ exports.publicUpvote = function(req, res) {
     // Only upvote if user hasn't already upvoted
     var upvoteIndex = project.upvoted.indexOf(req.user._id);
     if(upvoteIndex != -1) {
-      res.send(403);
+      // Already upvoted, remove the upvote
+      project.upvoted.splice(upvoteIndex, 1);
+      res.send(200);
     } else {
       project.upvoted.push(req.user);
       project.save(function(err, result) {
@@ -118,7 +121,8 @@ exports.publicDownvote = function(req, res) {
     // Only downvote if user hasn't already downvoted
     var downvoteIndex = project.downvoted.indexOf(req.user._id);
     if(downvoteIndex != -1) {
-      res.send(403);
+      project.downvoted.splice(downvoteIndex, 1);
+      res.send(200);
     } else {
       project.downvoted.push(req.user);
       project.save(function(err, result) {
@@ -128,3 +132,39 @@ exports.publicDownvote = function(req, res) {
     }
   });
 };
+
+// Add a contributor
+exports.addContributor = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    var contributorIndex = project.contributors.indexOf(req.body.contributor);
+    if(contributorIndex != -1) {
+      res.send(403);
+      return false;
+    } else {
+      project.contributors.push(req.body.contributor);
+      project.save(function(err, result) {
+        res.json(result);
+      });
+    }
+  });
+};
+
+// Add a contributor
+exports.removeContributor = function(req, res) {
+  Project.findById(req.params.id, function(err, project) {
+    if(err) res.send(err.message);
+
+    var contributorIndex = project.contributors.indexOf(req.body.contributor);
+    if(contributorIndex == -1) {
+      res.send(200)
+    } else {
+      project.contributors.splice(contributorIndex, 1);
+      project.save(function(err, result) {
+        res.json(result);
+      });
+    }
+  });
+};
+

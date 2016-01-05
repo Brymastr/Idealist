@@ -31,12 +31,14 @@ exports.localLogout = function(req, res) {
   res.send(200);
 };
 
-exports.hasAccess = function(req, res) {
-  Project.findOne({_id: req.params.id}, function(err, project) {
+exports.hasAccess = function(req, res, next) {
+  Project.findById(req.params.id, function(err, project) {
     if(err) {
       res.send(err.message);
-    } else if(!project) {
-      res.sendStatus(204);
+      return false;
+    }
+    if(!project) {
+      res.send(204);
       return false;
     }
 
@@ -45,7 +47,27 @@ exports.hasAccess = function(req, res) {
     } else if(project.contributors.indexOf(req.user._id) != -1) {
       return next();
     } else {
-      res.sendStatus(403);
+      res.send(403);
+      return false;
+    }
+  });
+};
+
+exports.isOwner = function(req, res, next) {
+  Project.findById(req.params.id, function(err, project) {
+    if (err) {
+      res.send(err.message);
+      return false;
+    }
+    if (!project) {
+      res.send(204);
+      return false;
+    }
+    if(project.owner.equals(req.user._id)) {
+      return next();
+    } else {
+      res.send(403);
+      return false;
     }
   });
 };

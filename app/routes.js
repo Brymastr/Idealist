@@ -16,7 +16,7 @@ module.exports = function(passport) {
   // TODO: maybe remove when done testing
   router.route('/authtest')
     .get(AuthController.isAuthenticated, function(req, res) {
-      res.send('Logged in');
+      res.send(req.user);
     });
 
   router.route('/accesstest/:id')
@@ -41,6 +41,13 @@ module.exports = function(passport) {
 
   router.route('/projects/downvote/:id')
     .post(AuthController.isAuthenticated, ProjectsController.publicDownvote);
+
+  router.route('/projects/addContributor/:id')
+    .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.addContributor);
+
+  router.route('/projects/removeContributor/:id')
+    .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.removeContributor);
+
 
   // Auth routes
   router.route('/login')
