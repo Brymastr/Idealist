@@ -68,3 +68,19 @@ exports.getComments = function(req, res) {
     }
   });
 };
+
+// PUT /api/projects
+exports.updateComment = function(req, res) {
+  Comment.findByIdAndUpdate(req.body._id, req.body, {new: true}, function(err, comment) {
+    if(err) res.send(err.message);
+    res.json(comment);
+  });
+};
+
+// PATCH /api/projects/:id
+exports.patchUpdateComment = function(req, res) {
+  Comment.findByIdAndUpdate(req.params.id, {$set: req.body, date_updated: new Date()}, {new: true}, function(err, comment) {
+    if(err) res.send(err.message);
+    res.json(comment);
+  });
+};

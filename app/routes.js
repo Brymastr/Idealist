@@ -49,12 +49,16 @@ module.exports = function(passport) {
   router.route('/projects/removeContributor/:id')
     .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.removeContributor);
 
+
+  // Comment routes
   router.route('/comments')
     .get(CommentsController.getComments);// todo: remove once done
 
   router.route('/comments/:id')
     .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getComment)
     .delete(AuthController.isAuthenticated, CommentsController.deleteComment)
+    .put(AuthController.isAuthenticated, CommentsController.updateComment)
+    .patch(AuthController.isAuthenticated, CommentsController.patchUpdateComment)
     .post(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.createComment); // :id in this one means the project id. The other two mean the comment id
 
   router.route('/projectComments/:id')
