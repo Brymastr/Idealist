@@ -11,7 +11,7 @@ exports.getProjects = function(req, res) {
     } else {
       res.json(projects);
     }
-  })
+  });
 };
 
 // GET /api/projects/:id
@@ -37,17 +37,18 @@ exports.createProject = function(req, res) {
     tags: req.body.tags,
     source: req.body.source,
     visibility: req.body.visibility,
-
-    ownerUpvotes: 0,
-    ownerDownvotes: 0,
-    upvoted: 0,
-    downvoted: 0,
+    owner_upvotes: 0,
+    owner_downvotes: 0,
     date_created: new Date(),
     date_updated: new Date()
   })
     .save(function(err, result) {
+      if(err) {
+        console.log(err.message);
+        res.send(err.message);
+        return false;
+      }
       res.json(result);
-      console.log("Project created");
     });
 };
 
@@ -69,11 +70,12 @@ exports.patchUpdateProject = function(req, res) {
 
 // DELETE /api/projects/:id
 exports.deleteProject = function(req, res) {
-  Project.findOneAndRemove({_id: req.params.id}, function (err, project) {
+  Project.findByIdAndRemove(req.params.id, function (err, project) {
     if (!err && res != null) {
-      res.status(200).json({status:"ok"})
-    } else
+      res.send(200);
+    } else {
       res.send(err.message);
+    }
   });
 };
 
@@ -168,41 +170,3 @@ exports.removeContributor = function(req, res) {
   });
 };
 
-// Add a comment
-exports.addComment = function(req, res) {
-  Project.findById(req.params.id, function(err, project) {
-    if(err) res.send(err.message);
-
-    var comment = Comment({
-      body: req.body.body,
-      owner: req.user,
-      date_created: new Date(),
-      date_updated: new Date()
-    });
-
-    project.comments.push(comment);
-    project.save(function(err, result) {
-      if(err) res.send(err.message);
-      res.json(result);
-    })
-  })
-};
-
-exports.removeComment = function(req, res) {
-  Project.findById(req.params.id, function(err, project) {
-    if(err) res.send(err.message);
-
-    var commentIndex = project.comments.indexOf(req.body.comment);
-    if(commentIndex == -1) {
-      res.send(200);
-    } else if(project.comments[commentIndex].owner != req.user._id) {
-      res.send(403);
-    } else {
-      project.comments.splice(commentIndex, 1);
-      project.save(function(err, result) {
-        if(err) res.send(err.message);
-        res.json(result);
-      });
-    }
-  });
-};

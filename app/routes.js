@@ -8,6 +8,7 @@ var express = require('express');
 var ProjectsController = require('./controllers/projectsController');
 var AuthController = require('./controllers/authController');
 var UsersController = require('./controllers/usersController');
+var CommentsController = require('./controllers/commentsController');
 
 module.exports = function(passport) {
 
@@ -48,11 +49,19 @@ module.exports = function(passport) {
   router.route('/projects/removeContributor/:id')
     .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.removeContributor);
 
-  router.route('/projects/addComment/:id')
-    .post(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.addComment);
+  router.route('/comments')
+    .get(CommentsController.getComments);// todo: remove once done
 
-  router.route('/projects/removeComment/:id')
-    .post(AuthController.isAuthenticated, AuthController.hasAccess, ProjectsController.removeComment);
+  router.route('/comments/:id')
+    .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getComment)
+    .delete(AuthController.isAuthenticated, CommentsController.deleteComment)
+    .post(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.createComment); // :id in this one means the project id. The other two mean the comment id
+
+  router.route('/projectComments/:id')
+    .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getCommentsForProject);
+
+  router.route('/userComments/:id')
+    .get(AuthController.isAuthenticated, CommentsController.getCommentsForUser);
 
 
   // Auth routes

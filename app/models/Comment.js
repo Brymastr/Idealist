@@ -10,6 +10,10 @@ var commentSchema = Schema({
     type: ObjectId,
     ref: 'User'
   },
+  project_id: {
+    type: ObjectId,
+    ref: 'Project'
+  },
   date_created: Date,
   date_updated: Date
 });

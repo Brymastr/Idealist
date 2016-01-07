@@ -5,14 +5,14 @@ var bcrypt = require('bcrypt');
 
 var userSchema = Schema({
     username: String,
-    firstName: String,
-    lastName: String,
+    first_name: String,
+    last_name: String,
     email: String,
     password: String,
-    passwordChangeToken: String,
-    dateUpdated: Date,
-    dateCreated: Date,
-    profilePicture: String
+    password_change_token: String,
+    date_updated: Date,
+    date_created: Date,
+    profile_picture: String
 });
 
 // Generate a hash
