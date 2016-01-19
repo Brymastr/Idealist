@@ -8,8 +8,15 @@ gulp.task('build', ['clean'], function() {
     .pipe(gulp.dest('dist/app/'));
 });
 
-gulp.task('config', ['clean'], function() {
+gulp.task('config-staging', ['clean'], function() {
   return gulp.src(['./config/config.staging.js'])
+    .pipe(plugins.uglify({mangle: false}))
+    .pipe(plugins.rename('config.js'))
+    .pipe(gulp.dest('dist/config/'));
+});
+
+gulp.task('config-production', ['clean'], function() {
+  return gulp.src(['./config/config.production.js'])
     .pipe(plugins.uglify({mangle: false}))
     .pipe(plugins.rename('config.js'))
     .pipe(gulp.dest('dist/config/'));
@@ -43,7 +50,7 @@ gulp.task('build-prod', [
   'clean',
   'build',
   'server',
-  'config',
+  'config-production',
   'auth',
   'dependencies'
 ]);

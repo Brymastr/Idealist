@@ -52,19 +52,19 @@ module.exports = function(passport) {
 
   // Comment routes
   router.route('/comments')
-    .get(CommentsController.getComments);// todo: remove once done
+    .get(CommentsController.getComments)// todo: remove once done
+    .put(AuthController.isAuthenticated, CommentsController.updateComment);
 
   router.route('/comments/:id')
     .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getComment)
     .delete(AuthController.isAuthenticated, CommentsController.deleteComment)
-    .put(AuthController.isAuthenticated, CommentsController.updateComment)
     .patch(AuthController.isAuthenticated, CommentsController.patchUpdateComment)
     .post(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.createComment); // :id in this one means the project id. The other two mean the comment id
 
   router.route('/projectComments/:id')
     .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getCommentsForProject);
 
-  router.route('/userComments/:id')
+  router.route('/userComments')
     .get(AuthController.isAuthenticated, CommentsController.getCommentsForUser);
 
 

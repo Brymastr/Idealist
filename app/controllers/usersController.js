@@ -22,7 +22,10 @@ exports.getUser = function(req, res) {
     } else if(!user) {
       res.sendStatus(204);
     } else {
-      res.json(user);
+      res.json({
+        username: user.username,
+        profile_picture: user.profile_picture
+      });
     }
   });
 };
