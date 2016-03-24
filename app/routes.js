@@ -4,13 +4,15 @@ var config = require('../config/config');
 // express
 var express = require('express');
 
-// Load controllers
+// controllers
 var ProjectsController = require('./controllers/projectsController');
 var AuthController = require('./controllers/authController');
 var UsersController = require('./controllers/usersController');
 var CommentsController = require('./controllers/commentsController');
+var ClientsController = require('./controllers/clientsController');
+var Oauth2Controller = require('./controllers/oauth2Controller');
 
-module.exports = function(passport) {
+module.exports = function() {
 
   var router = express.Router();
 
@@ -20,12 +22,6 @@ module.exports = function(passport) {
       res.send(req.user);
     });
 
-  router.route('/accesstest/:id')
-    .get(AuthController.hasAccess, function(req, res) {
-      res.send('Access granted');
-    });
-
-
   // Project routes
   router.route('/projects')
     .get(AuthController.isAuthenticated, ProjectsController.getProjects)
@@ -34,8 +30,8 @@ module.exports = function(passport) {
 
   router.route('/projects/:id')
     .get(AuthController.isAuthenticated, ProjectsController.getProject)
-    .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject)
-    .delete(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.deleteProject);
+    .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject);
+    // .delete(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.deleteProject);
 
   router.route('/projects/upvote/:id')
     .post(AuthController.isAuthenticated, ProjectsController.publicUpvote);
@@ -43,11 +39,11 @@ module.exports = function(passport) {
   router.route('/projects/downvote/:id')
     .post(AuthController.isAuthenticated, ProjectsController.publicDownvote);
 
-  router.route('/projects/addContributor/:id')
-    .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.addContributor);
+  // router.route('/projects/addContributor/:id')
+  //   .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.addContributor);
 
-  router.route('/projects/removeContributor/:id')
-    .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.removeContributor);
+  // router.route('/projects/removeContributor/:id')
+  //   .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.removeContributor);
 
 
   // Comment routes
@@ -56,30 +52,42 @@ module.exports = function(passport) {
     .put(AuthController.isAuthenticated, CommentsController.updateComment);
 
   router.route('/comments/:id')
-    .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getComment)
+    // .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getComment)
     .delete(AuthController.isAuthenticated, CommentsController.deleteComment)
-    .patch(AuthController.isAuthenticated, CommentsController.patchUpdateComment)
-    .post(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.createComment); // :id in this one means the project id. The other two mean the comment id
+    .patch(AuthController.isAuthenticated, CommentsController.patchUpdateComment);
+    // .post(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.createComment); // :id in this one means the project id. The other two mean the comment id
 
-  router.route('/projectComments/:id')
-    .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getCommentsForProject);
+  // router.route('/projectComments/:id')
+  //   .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getCommentsForProject);
 
   router.route('/userComments')
     .get(AuthController.isAuthenticated, CommentsController.getCommentsForUser);
 
 
   // Auth routes
-  router.route('/login')
-    .post(AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
+  // router.route('/login')
+  //   .post(AuthController.oauth2Login, function(req, res) {res.send(req.user)});
 
-  router.route('/logout')
-    .post(AuthController.localLogout);
+  // router.route('/logout')
+  //   .post(AuthController.localLogout);
+
+  router.route('/clients')
+    .post(AuthController.isAuthenticated, ClientsController.postClients)
+    .get(AuthController.isAuthenticated, ClientsController.getClients);
+
+  router.route('/oauth2/authorize')
+    .get(AuthController.isAuthenticated, Oauth2Controller.authorization)
+    .post(AuthController.isAuthenticated, Oauth2Controller.decision);
+
+  router.route('/oauth2/token')
+    .post(AuthController.isClientAuthenticated, Oauth2Controller.token);
 
 
   // User routes
   router.route('/users')
     .get(UsersController.getUsers)// TODO: remove when happy with signup and login
-    .post(AuthController.localSignup(passport), AuthController.localLogin(passport), function(req, res) {res.send(req.user)});
+    .post(UsersController.createUser)
+    .delete(UsersController.deleteAllUsers); // TODO: remove after testing
 
   router.route('/users/:id')
     .get(AuthController.isAuthenticated, UsersController.getUser);

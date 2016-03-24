@@ -29,3 +29,39 @@ exports.getUser = function(req, res) {
     }
   });
 };
+
+exports.createUser = function(req, res) {
+  var newUser = new User();
+
+  var username = req.body.username;
+  var password = req.body.password;
+
+  if(!username) {
+    res.status(400).send("Missing username");
+  }
+
+  if(!password) {
+    res.status(400).send("Missing password");
+  }
+
+  User.findOne({username: username}, function(err, user) {
+    if(user) {
+      res.send("Username already exists");
+    } else {
+      newUser.username = username;
+      newUser.password = password;
+      newUser.save(function(err) {
+        if (err)
+          res.send(err);
+
+        res.send(newUser);
+      });
+    }
+  });
+};
+
+
+exports.deleteAllUsers = function(req, res) {
+  User.remove({}, function() {});
+  res.send(200);
+};

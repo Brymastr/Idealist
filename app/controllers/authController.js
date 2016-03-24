@@ -1,75 +1,70 @@
-var config = require('../../config/config');
-var Project = require('../models/Project');
-var User = require('../models/User');
-
-// passport
+// Load required packages
 var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var User = require('../models/User');
+var Client = require('../models/Client');
+var Token = require('../models/Token');
 
-exports.localLogin = function(req, res) {
-  return passport.authenticate('local-login', {
-    successFlash: 'Welcome!',
-    failureFlash: 'Incorrect username or password.'
-  })
-};
+passport.use(new BasicStrategy(
+  function(username, password, callback) {
+    console.log(username);
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return callback(err); }
 
-exports.localSignup = function(req, res) {
-  return passport.authenticate('local-signup', {
-    failureFlash: true,
-    successFlash: 'Success!'
-  })
-};
+      // No user found with that username
+      if (!user) { return callback(null, false); }
 
-exports.isAuthenticated = function(req, res, next) {
-  if(req.isAuthenticated()) {
-    return next();
+      // Make sure the password is correct
+      user.verifyPassword(password, function(err, isMatch) {
+        if (err) { return callback(err); }
+
+        // Password did not match
+        if (!isMatch) { return callback(null, false); }
+
+        // Success
+        return callback(null, user);
+      });
+    });
   }
-  res.send(401);
-};
+));
 
-exports.localLogout = function(req, res) {
-  req.logOut();
-  res.send(200);
-};
+passport.use('client-basic', new BasicStrategy(
+  function(clientId, clientSecret, callback) {
+    Client.findOne({ _id: clientId }, function (err, client) {
+      if (err) { return callback(err); }
 
-exports.hasAccess = function(req, res, next) {
-  Project.findById(req.params.id, function(err, project) {
-    if(err) {
-      res.send(err.message);
-      return false;
-    }
-    if(!project) {
-      res.send(204);
-      return false;
-    }
+      // No client found with that id or bad password
+      if (!client || client.secret !== clientSecret) { return callback(null, false); }
 
-    if(project.owner.equals(req.user._id)) {
-      return next();
-    } else if(project.contributors.indexOf(req.user._id) != -1) {
-      return next();
-    } else if(project.visibility == 2) {
-      return next();
-    } else {
-      res.send(403);
-      return false;
-    }
-  });
-};
+      // Success
+      return callback(null, client);
+    });
+  }
+));
 
-exports.isOwner = function(req, res, next) {
-  Project.findById(req.params.id, function(err, project) {
-    if (err) {
-      res.send(err.message);
-      return false;
-    }
-    if (!project) {
-      res.send(204);
-      return false;
-    }
-    if(project.owner.equals(req.user._id)) {
-      return next();
-    } else {
-      res.send(403);
-      return false;
-    }
-  });
-};
+passport.use(new BearerStrategy(
+  function(accessToken, callback) {
+    console.log(accessToken);
+    Token.findOne({value: accessToken }, function (err, token) {
+      if (err) { return callback(err); }
+
+      // No token found
+      if (!token) { return callback(null, false); }
+
+      User.findOne({ _id: token.user_id }, function (err, user) {
+        if (err) { return callback(err); }
+
+        // No user found
+        if (!user) { return callback(null, false); }
+
+        // Simple example with no scope
+        callback(null, user, { scope: '*' });
+      });
+    });
+  }
+));
+
+exports.isAuthenticated = passport.authenticate(['basic', 'bearer'], { session : false });
+exports.isClientAuthenticated = passport.authenticate('client-basic', { session : false });
+exports.isBearerAuthenticated = passport.authenticate('bearer', { session: false });
