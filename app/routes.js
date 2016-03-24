@@ -24,20 +24,20 @@ module.exports = function() {
 
   // Project routes
   router.route('/projects')
-    .get(AuthController.isAuthenticated, ProjectsController.getProjects)
-    .post(AuthController.isAuthenticated, ProjectsController.createProject)
-    .put(AuthController.isAuthenticated, ProjectsController.updateProject);
+    .get(AuthController.isBearerAuthenticated, ProjectsController.getProjects)
+    .post(AuthController.isBearerAuthenticated, ProjectsController.createProject)
+    .put(AuthController.isBearerAuthenticated, ProjectsController.updateProject);
 
   router.route('/projects/:id')
-    .get(AuthController.isAuthenticated, ProjectsController.getProject)
-    .patch(AuthController.isAuthenticated, ProjectsController.patchUpdateProject);
+    .get(AuthController.isBearerAuthenticated, ProjectsController.getProject)
+    .patch(AuthController.isBearerAuthenticated, ProjectsController.patchUpdateProject);
     // .delete(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.deleteProject);
 
   router.route('/projects/upvote/:id')
-    .post(AuthController.isAuthenticated, ProjectsController.publicUpvote);
+    .post(AuthController.isBearerAuthenticated, ProjectsController.publicUpvote);
 
   router.route('/projects/downvote/:id')
-    .post(AuthController.isAuthenticated, ProjectsController.publicDownvote);
+    .post(AuthController.isBearerAuthenticated, ProjectsController.publicDownvote);
 
   // router.route('/projects/addContributor/:id')
   //   .post(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.addContributor);
@@ -49,35 +49,30 @@ module.exports = function() {
   // Comment routes
   router.route('/comments')
     .get(CommentsController.getComments)// todo: remove once done
-    .put(AuthController.isAuthenticated, CommentsController.updateComment);
+    .put(AuthController.isBearerAuthenticated, CommentsController.updateComment);
 
   router.route('/comments/:id')
     // .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getComment)
-    .delete(AuthController.isAuthenticated, CommentsController.deleteComment)
-    .patch(AuthController.isAuthenticated, CommentsController.patchUpdateComment);
+    .delete(AuthController.isBearerAuthenticated, CommentsController.deleteComment)
+    .patch(AuthController.isBearerAuthenticated, CommentsController.patchUpdateComment);
     // .post(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.createComment); // :id in this one means the project id. The other two mean the comment id
 
   // router.route('/projectComments/:id')
   //   .get(AuthController.isAuthenticated, AuthController.hasAccess, CommentsController.getCommentsForProject);
 
   router.route('/userComments')
-    .get(AuthController.isAuthenticated, CommentsController.getCommentsForUser);
+    .get(AuthController.isBearerAuthenticated, CommentsController.getCommentsForUser);
 
 
-  // Auth routes
-  // router.route('/login')
-  //   .post(AuthController.oauth2Login, function(req, res) {res.send(req.user)});
 
-  // router.route('/logout')
-  //   .post(AuthController.localLogout);
-
+  // Authentication routes
   router.route('/clients')
     .post(AuthController.isAuthenticated, ClientsController.postClients)
     .get(AuthController.isAuthenticated, ClientsController.getClients);
 
   router.route('/oauth2/authorize')
-    .get(AuthController.isAuthenticated, Oauth2Controller.authorization)
-    .post(AuthController.isAuthenticated, Oauth2Controller.decision);
+    .get(AuthController.isAuthenticated, Oauth2Controller.authorization);
+    // .post(AuthController.isAuthenticated, Oauth2Controller.decision);
 
   router.route('/oauth2/token')
     .post(AuthController.isClientAuthenticated, Oauth2Controller.token);
@@ -90,7 +85,7 @@ module.exports = function() {
     .delete(UsersController.deleteAllUsers); // TODO: remove after testing
 
   router.route('/users/:id')
-    .get(AuthController.isAuthenticated, UsersController.getUser);
+    .get(AuthController.isBearerAuthenticated, UsersController.getUser);
 
 
   // Anything else should go to angular routes
