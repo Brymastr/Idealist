@@ -22,15 +22,6 @@ gulp.task('config-production', ['clean'], function() {
     .pipe(gulp.dest('dist/config/'));
 });
 
-gulp.task('auth', ['clean'], function() {
-  return gulp.src([
-    './config/passport.js',
-    './config/auth.js'
-  ])
-    .pipe(plugins.uglify({mangle: false}))
-    .pipe(gulp.dest('dist/config/'));
-});
-
 gulp.task('server', ['clean'], function() {
   return gulp.src('server.js')
     .pipe(plugins.uglify({mangle: false}))
@@ -51,6 +42,13 @@ gulp.task('build-prod', [
   'build',
   'server',
   'config-production',
-  'auth',
+  'dependencies'
+]);
+
+gulp.task('build-stage', [
+  'clean',
+  'build',
+  'server',
+  'config-staging',
   'dependencies'
 ]);
