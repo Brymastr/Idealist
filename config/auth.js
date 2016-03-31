@@ -7,8 +7,8 @@ var Client = require('../app/models/client');
 var Token = require('../app/models/token');
 
 passport.use(new BasicStrategy(
-  function(username, password, callback) {
-    User.findOne({ username: username }, function (err, user) {
+  function(email, password, callback) {
+    User.findOne({ email: email }, function (err, user) {
       if (err) { return callback(err); }
 
       // No user found with that username
@@ -29,8 +29,8 @@ passport.use(new BasicStrategy(
 ));
 
 passport.use('client-basic', new BasicStrategy(
-  function(username, password, callback) {
-    Client.findOne({ username: username }, function (err, client) {
+  function(clientId, password, callback) {
+    Client.findOne({ _id: clientId }, function (err, client) {
       if (err) { return callback(err); }
 
       // No client found with that id or bad password

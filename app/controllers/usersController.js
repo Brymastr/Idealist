@@ -24,7 +24,7 @@ exports.getUser = function(req, res) {
       res.sendStatus(204);
     } else {
       res.json({
-        username: user.username,
+        email: user.email,
         profile_picture: user.profile_picture
       });
     }
@@ -34,23 +34,23 @@ exports.getUser = function(req, res) {
 exports.createUser = function(req, res) {
   var newUser = new User();
 
-  var username = req.body.username;
+  var email = req.body.email;
   var password = req.body.password;
 
-  if(!username) {
-    res.status(400).send("Missing username");
+  if(!email) {
+    res.status(400).send("Missing email");
   }
 
   if(!password) {
     res.status(400).send("Missing password");
   }
 
-  User.findOne({username: username}, function(err, user) {
+  User.findOne({email: email}, function(err, user) {
     console.log(newUser);
     if(user) {
-      res.send("Username already exists");
+      res.send("Email already exists");
     } else {
-      newUser.username = username;
+      newUser.email = email;
       newUser.password = newUser.generateHash(password);
       console.log(newUser);
       newUser.save(function(err) {

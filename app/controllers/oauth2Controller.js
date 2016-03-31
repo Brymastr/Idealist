@@ -22,9 +22,9 @@ server.deserializeClient(function(id, callback) {
 server.grant(oauth2orize.grant.code(function(client, redirectUri, user, ares, callback) {
   var code = new Code({
     value: uuid.v4(),
+    user_id: user._id,
     client_id: client._id,
-    redirect_uri: redirectUri,
-    user_id: user._id
+    redirect_uri: redirectUri
   });
 
   code.save(function(err) {

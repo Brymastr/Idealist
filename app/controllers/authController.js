@@ -7,22 +7,17 @@ var Client = require('../models/Client');
 var Token = require('../models/Token');
 
 passport.use(new BasicStrategy(
-  function(username, password, callback) {
-    console.log(username);
-    User.findOne({ username: username }, function (err, user) {
+  function(email, password, callback) {
+    User.findOne({ email: email }, function (err, user) {
       if (err) { return callback(err); }
 
-      // No user found with that username
       if (!user) { return callback(null, false); }
 
-      // Make sure the password is correct
       user.verifyPassword(password, function(err, isMatch) {
         if (err) { return callback(err); }
 
-        // Password did not match
         if (!isMatch) { return callback(null, false); }
 
-        // Success
         return callback(null, user);
       });
     });
@@ -34,11 +29,15 @@ passport.use('client-basic', new BasicStrategy(
     Client.findOne({ _id: clientId }, function (err, client) {
       if (err) { return callback(err); }
 
-      // No client found with that id or bad password
-      if (!client || client.secret !== clientSecret) { return callback(null, false); }
+      if (!client) { return callback(null, false); }
 
-      // Success
-      return callback(null, client);
+      client.verifySecret(clientSecret, function(err, isMatch) {
+        if (err) { return callback(err); }
+
+        if (!isMatch) { return callback(null, false); }
+
+        return callback(null, client);
+      });
     });
   }
 ));

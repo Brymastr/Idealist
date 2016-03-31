@@ -72,8 +72,8 @@ module.exports = function() {
 
   // User routes
   router.route('/users')
-    .get(UsersController.getUsers)// TODO: remove when happy with signup and login
     .post(UsersController.createUser)
+    .get(UsersController.getUsers)// TODO: remove when happy with signup and login
     .delete(UsersController.deleteAllUsers); // TODO: remove after testing
 
   router.route('/users/:id')
