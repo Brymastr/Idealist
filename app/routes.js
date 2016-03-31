@@ -16,12 +16,6 @@ module.exports = function() {
 
   var router = express.Router();
 
-  // TODO: maybe remove when done testing
-  router.route('/authtest')
-    .get(AuthController.isAuthenticated, function(req, res) {
-      res.send(req.user);
-    });
-
   // Project routes
   router.route('/projects')
     .get(AuthController.isBearerAuthenticated, ProjectsController.getProjects)
@@ -64,7 +58,6 @@ module.exports = function() {
     .get(AuthController.isBearerAuthenticated, CommentsController.getCommentsForUser);
 
 
-
   // Authentication routes
   router.route('/clients')
     .post(AuthController.isAuthenticated, ClientsController.postClients)
@@ -72,7 +65,6 @@ module.exports = function() {
 
   router.route('/oauth2/authorize')
     .get(AuthController.isAuthenticated, Oauth2Controller.authorization);
-    // .post(AuthController.isAuthenticated, Oauth2Controller.decision);
 
   router.route('/oauth2/token')
     .post(AuthController.isClientAuthenticated, Oauth2Controller.token);

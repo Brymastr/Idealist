@@ -20,7 +20,6 @@ server.deserializeClient(function(id, callback) {
 });
 
 server.grant(oauth2orize.grant.code(function(client, redirectUri, user, ares, callback) {
-  // Create a new authorization code
   var code = new Code({
     value: uuid.v4(),
     client_id: client._id,
@@ -28,9 +27,6 @@ server.grant(oauth2orize.grant.code(function(client, redirectUri, user, ares, ca
     user_id: user._id
   });
 
-  console.log(code);
-
-  // Save the auth code and check for errors
   code.save(function(err) {
     if (err) { return callback(err); }
 

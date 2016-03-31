@@ -15,6 +15,7 @@ exports.getUsers = function(req, res) {
   });
 };
 
+// Return the username and profile picture for a specific user
 exports.getUser = function(req, res) {
   User.findOne({_id: req.params.id}, function(err, user) {
     if(err) {
@@ -45,15 +46,17 @@ exports.createUser = function(req, res) {
   }
 
   User.findOne({username: username}, function(err, user) {
+    console.log(newUser);
     if(user) {
       res.send("Username already exists");
     } else {
       newUser.username = username;
-      newUser.password = password;
+      newUser.password = newUser.generateHash(password);
+      console.log(newUser);
       newUser.save(function(err) {
+        console.log("after save");
         if (err)
           res.send(err);
-
         res.send(newUser);
       });
     }
