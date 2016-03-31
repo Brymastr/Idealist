@@ -2,21 +2,14 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
 
-gulp.task('build', ['clean'], function() {
+gulp.task('app', ['clean'], function() {
   return gulp.src('./app/**/*.js')
     .pipe(plugins.uglify())
     .pipe(gulp.dest('dist/app/'));
 });
 
-gulp.task('config-staging', ['clean'], function() {
-  return gulp.src(['./config/config.staging.js'])
-    .pipe(plugins.uglify({mangle: false}))
-    .pipe(plugins.rename('config.js'))
-    .pipe(gulp.dest('dist/config/'));
-});
-
-gulp.task('config-production', ['clean'], function() {
-  return gulp.src(['./config/config.production.js'])
+gulp.task('config', ['clean'], function() {
+  return gulp.src(['./config/config.release.js'])
     .pipe(plugins.uglify({mangle: false}))
     .pipe(plugins.rename('config.js'))
     .pipe(gulp.dest('dist/config/'));
@@ -37,18 +30,10 @@ gulp.task('clean', function() {
   return del(['dist']);
 });
 
-gulp.task('build-prod', [
+gulp.task('build', [
   'clean',
-  'build',
+  'app',
   'server',
-  'config-production',
-  'dependencies'
-]);
-
-gulp.task('build-stage', [
-  'clean',
-  'build',
-  'server',
-  'config-staging',
+  'config',
   'dependencies'
 ]);

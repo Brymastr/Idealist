@@ -5,7 +5,7 @@ COPY . /src
 
 RUN npm install -g gulp
 RUN npm install --only=dev
-RUN gulp build-stage
+RUN gulp build
 
 WORKDIR /src/dist
 
