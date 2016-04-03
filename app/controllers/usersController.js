@@ -46,15 +46,13 @@ exports.createUser = function(req, res) {
   }
 
   User.findOne({email: email}, function(err, user) {
-    console.log(newUser);
     if(user) {
       res.send("Email already exists");
     } else {
       newUser.email = email;
       newUser.password = newUser.generateHash(password);
-      console.log(newUser);
       newUser.save(function(err) {
-        console.log("after save");
+        console.log('User created: ' + user._id);
         if (err)
           res.send(err);
         res.send(newUser);

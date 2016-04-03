@@ -1,4 +1,0 @@
-Passport bearer
-Facebook OAuth
-Google OAuth
-Github

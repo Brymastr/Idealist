@@ -1,1 +1,0 @@
-Should anything actually be deleted? Soft delete may be safer. Add 'deleted' boolean property to each model

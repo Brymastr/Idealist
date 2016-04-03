@@ -1,0 +1,8 @@
+TODO:
+
+Renable all enpoints for OAuth
+Soft deletes
+Docker swarm
+Multiple docker service instances
+Rewrite README.md
+Docker deploy new services and updating existing services without redeploying entire suite (docker-compose --no-recreate ?)

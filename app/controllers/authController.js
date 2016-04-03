@@ -44,7 +44,6 @@ passport.use('client-basic', new BasicStrategy(
 
 passport.use(new BearerStrategy(
   function(accessToken, callback) {
-    console.log(accessToken);
     Token.findOne({value: accessToken }, function (err, token) {
       if (err) { return callback(err); }
 
