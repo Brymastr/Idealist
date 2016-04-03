@@ -1,5 +1,6 @@
 TODO:
 
+Secure mongo service
 Renable all enpoints for OAuth
 Soft deletes
 Docker swarm

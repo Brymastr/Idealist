@@ -16,7 +16,6 @@ var config = require('./config/config');
 // Create app using express router
 var app = express();
 
-
 // App configuration
 app.use(morgan(config.env));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -33,7 +32,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(session({
-  secret: 'Super Secret Session Key',
+  secret: config.secret,
   saveUninitialized: true,
   resave: true
 }));
