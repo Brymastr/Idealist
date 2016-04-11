@@ -1,6 +1,3 @@
-/**
- * Created by Brycen on 2015-06-10.
- */
 var config = require('../../config/config');
 var User = require('../models/User');
 
@@ -52,7 +49,7 @@ exports.createUser = function(req, res) {
       newUser.email = email;
       newUser.password = newUser.generateHash(password);
       newUser.save(function(err) {
-        console.log('User created: ' + user._id);
+        console.log('User created: ' + newUser._id);
         if (err)
           res.send(err);
         res.send(newUser);
@@ -64,5 +61,5 @@ exports.createUser = function(req, res) {
 
 exports.deleteAllUsers = function(req, res) {
   User.remove({}, function() {});
-  res.send(200);
+  res.sendStatus(200);
 };

@@ -5,6 +5,11 @@ var Comment = require('../models/Comment');
 
 // GET /api/projects
 exports.getProjects = function(req, res) {
+  if(req.user === undefined) {
+    res.send('Not signed in');
+    return;
+  }
+
   Project.find({owner: req.user._id}, function(err, projects) {
     if(err) {
       res.send(err.message);
@@ -24,6 +29,20 @@ exports.getProject = function(req, res) {
     } else {
       res.json(project);
     }
+  });
+};
+
+exports.isOwner = function(req, res) {
+  if(req.user === undefined) {
+    return false;
+  }
+
+  var id = (req.params.id !== undefined) ? req.params.id : req.body._id;
+
+  Project.findOne({_id: id}, function(err, project) {
+    if(err)
+      return false;
+    else return project.owner === req.user._id;
   });
 };
 

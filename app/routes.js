@@ -18,14 +18,16 @@ module.exports = function() {
 
   // Project routes
   router.route('/projects')
-    .get(AuthController.isBearerAuthenticated, ProjectsController.getProjects)
-    .post(AuthController.isBearerAuthenticated, ProjectsController.createProject)
-    .put(AuthController.isBearerAuthenticated, ProjectsController.updateProject);
+    .all(AuthController.isBearerAuthenticated)
+    .get(ProjectsController.getProjects)
+    .post(ProjectsController.createProject)
+    .put(ProjectsController.isOwner, ProjectsController.updateProject);
 
   router.route('/projects/:id')
-    .get(AuthController.isBearerAuthenticated, ProjectsController.getProject)
-    .patch(AuthController.isBearerAuthenticated, ProjectsController.patchUpdateProject);
-    // .delete(AuthController.isAuthenticated, AuthController.isOwner, ProjectsController.deleteProject);
+    .all(AuthController.isBearerAuthenticated)
+    .get(ProjectsController.getProject)
+    .patch(ProjectsController.isOwner, ProjectsController.patchUpdateProject)
+    .delete(ProjectsController.isOwner, ProjectsController.deleteProject);
 
   router.route('/projects/upvote/:id')
     .post(AuthController.isBearerAuthenticated, ProjectsController.publicUpvote);
